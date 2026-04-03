@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MixLab — Drink Innovation System</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0c;
+  --surface: #131318;
+  --surface2: #1a1a22;
+  --surface3: #22222e;
+  --border: #2a2a38;
+  --text: #e8e6f0;
+  --text-dim: #8886a0;
+  --text-muted: #5a587a;
+  --accent: #a6e36f;
+  --accent-dim: #7ab84a;
+  --danger: #ff6b6b;
+  --danger-bg: rgba(255,107,107,0.08);
+  --danger-border: rgba(255,107,107,0.2);
+  --warn: #ffb347;
+  --warn-bg: rgba(255,179,71,0.08);
+  --warn-border: rgba(255,179,71,0.2);
+  --good: #6bdfb8;
+  --good-bg: rgba(107,223,184,0.08);
+  --good-border: rgba(107,223,184,0.2);
+  --info: #7eb8ff;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Header */
+.header {
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(166,227,111,0.03) 0%, transparent 100%);
+}
+.logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 32px;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+}
+.logo span { color: var(--text-dim); font-weight: 300; }
+.tagline { color: var(--text-muted); font-size: 13px; margin-left: auto; }
+
+/* Layout */
+.app {
+  display: grid;
+  grid-template-columns: 320px 1fr 380px;
+  height: calc(100vh - 81px);
+}
+
+/* Ingredient Panel */
+.panel-left {
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.panel-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.panel-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* Search */
+.search-box {
+  position: relative;
+}
+.search-box input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px 10px 36px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-box input:focus { border-color: var(--accent); }
+.search-box::before {
+  content: '⌕';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+/* Categories */
+.categories {
+  display: flex;
+  gap: 6px;
+  padding: 12px 20px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.cat-btn {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.cat-btn.active, .cat-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+/* Ingredient List */
+.ingredient-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.ingredient-item:hover {
+  background: var(--surface2);
+  border-color: var(--border);
+}
+.ing-emoji { font-size: 22px; width: 32px; text-align: center; }
+.ing-info { flex: 1; min-width: 0; }
+.ing-name { font-size: 13px; font-weight: 500; }
+.ing-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.ing-add {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.ing-add:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+/* Center / Glass Area */
+.panel-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: radial-gradient(ellipse at 50% 80%, rgba(166,227,111,0.04) 0%, transparent 60%);
+  overflow-y: auto;
+  padding: 32px 24px;
+}
+
+.drink-type-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.drink-type-btn {
+  padding: 8px 20px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.drink-type-btn.active {
+  background: var(--surface3);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+/* Glass Visualization */
+.glass-container {
+  position: relative;
+  width: 200px;
+  margin-bottom: 28px;
+}
+.glass-svg { width: 100%; }
+
+/* Mix Items */
+.mix-area {
+  width: 100%;
+  max-width: 500px;
+}
+.mix-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.mix-items { display: flex; flex-direction: column; gap: 6px; }
+.mix-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  animation: slideIn 0.25s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.mix-item .ing-emoji { font-size: 18px; width: 24px; }
+.mix-item-name { font-size: 13px; flex: 1; }
+.mix-qty {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.mix-qty button {
+  width: 24px; height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text-dim);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.mix-qty button:hover { border-color: var(--accent); color: var(--accent); }
+.mix-qty-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  width: 50px;
+  text-align: center;
+  color: var(--text-dim);
+}
+.mix-remove {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  transition: color 0.15s;
+}
+.mix-remove:hover { color: var(--danger); }
+
+.empty-mix {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+.empty-mix .big { font-size: 40px; margin-bottom: 12px; }
+
+/* Right Panel - Analysis */
+.panel-right {
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.analysis-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.analysis-section {
+  margin-bottom: 24px;
+}
+.section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Macros */
+.macro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.macro-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+.macro-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text);
+}
+.macro-unit { font-size: 11px; color: var(--text-muted); }
+.macro-name { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+/* Compounds */
+.compound-list { display: flex; flex-direction: column; gap: 4px; }
+.compound-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--surface);
+  border-radius: 6px;
+  font-size: 12px;
+}
+.compound-name { flex: 1; color: var(--text-dim); }
+.compound-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text);
+}
+.compound-bar-wrap {
+  width: 48px;
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.compound-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* Alerts */
+.alert-card {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.alert-card.danger { background: var(--danger-bg); border: 1px solid var(--danger-border); }
+.alert-card.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); }
+.alert-card.good { background: var(--good-bg); border: 1px solid var(--good-border); }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert-card.danger .alert-icon { color: var(--danger); }
+.alert-card.warn .alert-icon { color: var(--warn); }
+.alert-card.good .alert-icon { color: var(--good); }
+.alert-text strong { display: block; margin-bottom: 2px; }
+.alert-card.danger .alert-text strong { color: var(--danger); }
+.alert-card.warn .alert-text strong { color: var(--warn); }
+.alert-card.good .alert-text strong { color: var(--good); }
+
+/* Benefit tags */
+.benefit-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.benefit-tag {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  background: var(--good-bg);
+  border: 1px solid var(--good-border);
+  color: var(--good);
+}
+
+/* Empty state */
+.analysis-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 40px;
+  line-height: 1.8;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .app { grid-template-columns: 280px 1fr 320px; }
+}
+@media (max-width: 860px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; height: auto; }
+  .panel-left, .panel-right { max-height: 50vh; }
+  .header { padding: 16px 20px; }
+  .tagline { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">MixLab <span>v0.1</span></div>
+  <div class="tagline">Drink Innovation System — Nutrition · Compounds · Safety</div>
+</div>
+
+<div class="app">
+  <!-- LEFT: Ingredient Picker -->
+  <div class="panel-left">
+    <div class="panel-header">
+      <div class="panel-title">Ingredients</div>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search ingredients..." oninput="filterIngredients()">
+      </div>
+    </div>
+    <div class="categories" id="categories"></div>
+    <div class="ingredient-list" id="ingredientList"></div>
+  </div>
+
+  <!-- CENTER: Glass + Mix -->
+  <div class="panel-center">
+    <div class="drink-type-selector" id="drinkTypes"></div>
+    <div class="glass-container" id="glassContainer"></div>
+    <div class="mix-area">
+      <div class="mix-title">Your Mix</div>
+      <div id="mixItems"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Analysis -->
+  <div class="panel-right">
+    <div class="analysis-scroll" id="analysisPanel"></div>
+  </div>
+</div>
+
+<script>
+// ====================== INGREDIENT DATABASE ======================
+const INGREDIENTS = [
+  // FRUITS
+  { id:'avocado', name:'Avocado', emoji:'🥑', cat:'Fruits', serving:'½ fruit (68g)', g:68,
+    macros:{cal:114,protein:1.3,fat:10.5,carb:6,fiber:4.6,sugar:0.2},
+    micros:{vitK:14,vitC:7,vitE:1.3,vitB6:0.2,folate:58,potassium:345,magnesium:20,copper:0.12},
+    compounds:{glutathione:15,betaSitosterol:57,lutein:0.18,oleicAcid:6700},
+    color:'#4a7a2e', benefits:['Heart health','Nutrient absorption','Anti-inflammatory'],
+    warnings:[{cond:'Blood thinners (Warfarin)',note:'High Vitamin K may interfere with anticoagulants',type:'warn'}]
+  },
+  { id:'blueberry', name:'Blueberry', emoji:'🫐', cat:'Fruits', serving:'¾ cup (111g)', g:111,
+    macros:{cal:63,protein:0.8,fat:0.4,carb:16,fiber:2.7,sugar:11},
+    micros:{vitC:13,vitK:20,manganese:0.5,vitB6:0.04,potassium:90},
+    compounds:{anthocyanins:163,pterostilbene:0.5,quercetin:3.1,chlorogenicAcid:42},
+    color:'#3b2478', benefits:['Antioxidant powerhouse','Brain health','Blood sugar regulation'],
+    warnings:[]
+  },
+  { id:'banana', name:'Banana', emoji:'🍌', cat:'Fruits', serving:'1 medium (118g)', g:118,
+    macros:{cal:105,protein:1.3,fat:0.4,carb:27,fiber:3.1,sugar:14},
+    micros:{vitC:10,vitB6:0.4,potassium:422,manganese:0.3,magnesium:32},
+    compounds:{dopamine:2.5,serotonin:1.4,tryptophan:11,resistantStarch:4800},
+    color:'#f5d76e', benefits:['Energy boost','Muscle recovery','Mood support'],
+    warnings:[{cond:'Kidney disease',note:'Very high potassium — dangerous with impaired kidney function',type:'warn'}]
+  },
+  { id:'mango', name:'Mango', emoji:'🥭', cat:'Fruits', serving:'½ cup (83g)', g:83,
+    macros:{cal:50,protein:0.7,fat:0.3,carb:12.5,fiber:1.3,sugar:11},
+    micros:{vitA:54,vitC:30,folate:36,vitB6:0.1,vitE:0.8},
+    compounds:{mangiferin:4.1,betaCarotene:640,zeaxanthin:0.02,gallicAcid:7},
+    color:'#f5a623', benefits:['Eye health','Immune support','Skin health'],
+    warnings:[{cond:'Diabetes (Type 2)',note:'High glycemic index — monitor blood sugar',type:'warn'}]
+  },
+  { id:'strawberry', name:'Strawberry', emoji:'🍓', cat:'Fruits', serving:'1 cup (150g)', g:150,
+    macros:{cal:49,protein:1,fat:0.5,carb:12,fiber:3,sugar:7.4},
+    micros:{vitC:89,manganese:0.6,folate:36,potassium:233},
+    compounds:{ellagicAcid:20,pelargonidin:25,fisetin:5.5,quercetin:1.1},
+    color:'#e23e57', benefits:['Immune boost','Anti-aging','Heart health'],
+    warnings:[]
+  },
+  { id:'pineapple', name:'Pineapple', emoji:'🍍', cat:'Fruits', serving:'½ cup (82g)', g:82,
+    macros:{cal:41,protein:0.4,fat:0.1,carb:11,fiber:1.2,sugar:8},
+    micros:{vitC:40,manganese:0.8,vitB6:0.1,thiamin:0.06},
+    compounds:{bromelain:120,ferulic:2.1,betaCarotene:0.02},
+    color:'#f7dc6f', benefits:['Digestion aid','Anti-inflammatory','Immune support'],
+    warnings:[{cond:'GERD / Acid reflux',note:'High acidity may worsen symptoms',type:'warn'}]
+  },
+
+  // DAIRY & ALT-MILK
+  { id:'almond_milk', name:'Almond Milk', emoji:'🥛', cat:'Dairy & Alt-Milk', serving:'1 cup (240ml)', g:240,
+    macros:{cal:30,protein:1,fat:2.5,carb:1,fiber:0.5,sugar:0},
+    micros:{vitE:7.4,vitD:2.4,calcium:450,potassium:170},
+    compounds:{alphaTocopherol:7.4},
+    color:'#f0e6d3', benefits:['Low calorie','Bone health','Lactose-free'],
+    warnings:[{cond:'Nut allergy',note:'Contains tree nuts — severe allergic reaction risk',type:'danger'}]
+  },
+  { id:'oat_milk', name:'Oat Milk', emoji:'🥛', cat:'Dairy & Alt-Milk', serving:'1 cup (240ml)', g:240,
+    macros:{cal:120,protein:3,fat:5,carb:16,fiber:2,sugar:7},
+    micros:{calcium:350,vitD:3.6,vitA:20,iron:1.8},
+    compounds:{betaGlucan:1700,avenanthramides:3.2},
+    color:'#e8dcc8', benefits:['Cholesterol reduction','Gut health','Sustained energy'],
+    warnings:[{cond:'Celiac disease',note:'May contain gluten traces from processing',type:'warn'}]
+  },
+  { id:'greek_yogurt', name:'Greek Yogurt', emoji:'🥄', cat:'Dairy & Alt-Milk', serving:'¾ cup (170g)', g:170,
+    macros:{cal:100,protein:17,fat:0.7,carb:6,fiber:0,sugar:4},
+    micros:{calcium:187,vitB12:1.3,phosphorus:229,potassium:240,zinc:1.1},
+    compounds:{probiotics:1e9,casein:11000,wheyProtein:3400,cla:12},
+    color:'#faf8f2', benefits:['Gut health','Muscle recovery','Bone strength'],
+    warnings:[{cond:'Lactose intolerance',note:'Contains lactose — may cause GI distress',type:'warn'}]
+  },
+  { id:'coconut_milk', name:'Coconut Milk', emoji:'🥥', cat:'Dairy & Alt-Milk', serving:'½ cup (120ml)', g:120,
+    macros:{cal:230,protein:2.3,fat:24,carb:6,fiber:2.2,sugar:3.3},
+    micros:{manganese:1.1,copper:0.3,iron:1.6,magnesium:44,phosphorus:100},
+    compounds:{lauricAcid:5500,capricAcid:1200,mct:7200},
+    color:'#fdfbf5', benefits:['Quick energy (MCTs)','Antimicrobial','Skin health'],
+    warnings:[{cond:'High cholesterol',note:'Very high in saturated fat — use sparingly',type:'warn'}]
+  },
+
+  // SUPERFOODS & SPICES
+  { id:'turmeric', name:'Turmeric', emoji:'🟡', cat:'Superfoods', serving:'½ tsp (1.5g)', g:1.5,
+    macros:{cal:4,protein:0.1,fat:0.1,carb:1,fiber:0.3,sugar:0},
+    micros:{iron:0.6,manganese:0.1},
+    compounds:{curcumin:47,turmerone:3.2,demethoxycurcumin:8},
+    color:'#e8a317', benefits:['Potent anti-inflammatory','Antioxidant','Joint health'],
+    warnings:[{cond:'Gallstones',note:'Stimulates bile production — may worsen gallbladder issues',type:'warn'},
+              {cond:'Blood thinners',note:'Has anticoagulant properties — may increase bleeding risk',type:'warn'}]
+  },
+  { id:'black_pepper', name:'Black Pepper', emoji:'⚫', cat:'Superfoods', serving:'1 pinch (0.3g)', g:0.3,
+    macros:{cal:1,protein:0,fat:0,carb:0.2,fiber:0.1,sugar:0},
+    micros:{manganese:0.02},
+    compounds:{piperine:16,betaCaryophyllene:2.5},
+    color:'#2d2d2d', benefits:['Enhances curcumin absorption 2000%','Digestive aid','Antioxidant'],
+    warnings:[]
+  },
+  { id:'ginger', name:'Ginger', emoji:'🫚', cat:'Superfoods', serving:'1 tsp grated (2g)', g:2,
+    macros:{cal:2,protein:0,fat:0,carb:0.4,fiber:0.1,sugar:0},
+    micros:{potassium:8,magnesium:1},
+    compounds:{gingerol:4.8,shogaol:0.6,zingerone:0.3,zingiberene:1.2},
+    color:'#d4a855', benefits:['Anti-nausea','Anti-inflammatory','Immune boost'],
+    warnings:[{cond:'Blood thinners',note:'May increase bleeding risk when combined with anticoagulants',type:'warn'}]
+  },
+  { id:'cinnamon', name:'Cinnamon', emoji:'🟤', cat:'Superfoods', serving:'½ tsp (1.3g)', g:1.3,
+    macros:{cal:3,protein:0.1,fat:0,carb:1,fiber:0.7,sugar:0},
+    micros:{calcium:13,manganese:0.2,iron:0.1},
+    compounds:{cinnamaldehyde:22,coumarin:0.8,eugenol:1.5,proanthocyanidins:5},
+    color:'#8B4513', benefits:['Blood sugar regulation','Antimicrobial','Brain function'],
+    warnings:[{cond:'Liver conditions',note:'Cassia cinnamon contains coumarin — hepatotoxic in excess',type:'warn'}]
+  },
+  { id:'matcha', name:'Matcha', emoji:'🍵', cat:'Superfoods', serving:'1 tsp (2g)', g:2,
+    macros:{cal:5,protein:0.6,fat:0.1,carb:0.6,fiber:0.4,sugar:0},
+    micros:{vitC:1.2,vitA:1.6,iron:0.3,potassium:27},
+    compounds:{lTheanine:14,caffeine:34,egcg:60,chlorophyll:10,catechins:100},
+    color:'#5d8a3c', benefits:['Calm focus','Fat oxidation','Rich in EGCG antioxidant'],
+    warnings:[{cond:'Anxiety disorders',note:'Contains caffeine — may increase anxiety symptoms',type:'warn'},
+              {cond:'Iron deficiency',note:'Catechins may inhibit iron absorption',type:'warn'}]
+  },
+  { id:'spirulina', name:'Spirulina', emoji:'🟢', cat:'Superfoods', serving:'1 tsp (3g)', g:3,
+    macros:{cal:9,protein:1.7,fat:0.2,carb:0.7,fiber:0.1,sugar:0},
+    micros:{iron:0.6,vitB12:0.2,vitK:0.8,copper:0.02,manganese:0.06},
+    compounds:{phycocyanin:50,chlorophyll:3.6,betaCarotene:0.4,gla:25},
+    color:'#1a5c34', benefits:['Complete protein','Heavy metal detox','Immune modulation'],
+    warnings:[{cond:'Autoimmune conditions',note:'Stimulates immune system — may worsen autoimmune flares',type:'danger'},
+              {cond:'PKU (Phenylketonuria)',note:'Contains phenylalanine',type:'danger'}]
+  },
+
+  // SWEETENERS
+  { id:'honey', name:'Honey', emoji:'🍯', cat:'Sweeteners', serving:'1 tbsp (21g)', g:21,
+    macros:{cal:64,protein:0.1,fat:0,carb:17,fiber:0,sugar:17},
+    micros:{},
+    compounds:{chrysin:0.5,pinocembrin:0.3,methylglyoxal:0.2,hydrogenPeroxide:0.1},
+    color:'#d4a017', benefits:['Antimicrobial','Cough suppressant','Wound healing'],
+    warnings:[{cond:'Diabetes',note:'Pure sugar — spikes blood glucose rapidly',type:'warn'},
+              {cond:'Infants under 1 year',note:'Risk of infant botulism — NEVER give to babies',type:'danger'}]
+  },
+  { id:'maple_syrup', name:'Maple Syrup', emoji:'🍁', cat:'Sweeteners', serving:'1 tbsp (20g)', g:20,
+    macros:{cal:52,protein:0,fat:0,carb:13,fiber:0,sugar:12},
+    micros:{manganese:0.7,zinc:0.4,calcium:13,potassium:42},
+    compounds:{quebecol:0.2,inulin:0.1},
+    color:'#a0522d', benefits:['Rich in manganese','Antioxidant properties','Lower glycemic than sugar'],
+    warnings:[{cond:'Diabetes',note:'Still high sugar — monitor blood glucose',type:'warn'}]
+  },
+
+  // NUTS & SEEDS
+  { id:'chia', name:'Chia Seeds', emoji:'⚪', cat:'Nuts & Seeds', serving:'2 tbsp (28g)', g:28,
+    macros:{cal:138,protein:4.7,fat:8.7,carb:12,fiber:9.8,sugar:0},
+    micros:{calcium:179,phosphorus:244,manganese:0.8,magnesium:95,zinc:1.3},
+    compounds:{ala:5000,quercetin:1.2,kaempferol:0.5},
+    color:'#8a8a7a', benefits:['Omega-3 rich','Fiber powerhouse','Sustained energy'],
+    warnings:[{cond:'Low blood pressure',note:'May lower blood pressure further',type:'warn'}]
+  },
+  { id:'flaxseed', name:'Flaxseed', emoji:'🟫', cat:'Nuts & Seeds', serving:'1 tbsp ground (7g)', g:7,
+    macros:{cal:37,protein:1.3,fat:3,carb:2,fiber:1.9,sugar:0.1},
+    micros:{thiamin:0.1,manganese:0.2,magnesium:27},
+    compounds:{ala:1597,lignans:42,sdi:0.6},
+    color:'#7a5c3a', benefits:['Heart health','Hormonal balance','Digestive regularity'],
+    warnings:[{cond:'Hormone-sensitive conditions',note:'Lignans have weak estrogenic activity',type:'warn'}]
+  },
+  { id:'peanut_butter', name:'Peanut Butter', emoji:'🥜', cat:'Nuts & Seeds', serving:'2 tbsp (32g)', g:32,
+    macros:{cal:190,protein:7,fat:16,carb:7,fiber:1.5,sugar:3},
+    micros:{vitE:2.9,magnesium:57,potassium:189,vitB3:4.3,vitB6:0.2},
+    compounds:{resveratrol:0.1,pCoumaricAcid:14,betaSitosterol:36,coq10:1.2},
+    color:'#c48a3f', benefits:['Satiety','Muscle building','Heart health'],
+    warnings:[{cond:'Peanut allergy',note:'Severe anaphylaxis risk — life-threatening',type:'danger'}]
+  },
+
+  // PROTEIN
+  { id:'whey_protein', name:'Whey Protein', emoji:'💪', cat:'Protein', serving:'1 scoop (30g)', g:30,
+    macros:{cal:120,protein:24,fat:1.5,carb:3,fiber:0,sugar:1},
+    micros:{calcium:100,iron:0.5},
+    compounds:{lactoferrin:100,immunoglobulins:200,bcaa:5500,leucine:2500},
+    color:'#f5e6d0', benefits:['Muscle protein synthesis','Immune support','Fast absorption'],
+    warnings:[{cond:'Lactose intolerance',note:'Contains lactose — may cause bloating and GI distress',type:'warn'},
+              {cond:'Kidney disease',note:'High protein load — may strain kidneys',type:'warn'}]
+  },
+  { id:'collagen', name:'Collagen Peptides', emoji:'✨', cat:'Protein', serving:'1 scoop (10g)', g:10,
+    macros:{cal:35,protein:9,fat:0,carb:0,fiber:0,sugar:0},
+    micros:{},
+    compounds:{hydroxyproline:1200,glycine:2200,proline:1300},
+    color:'#fff5eb', benefits:['Skin elasticity','Joint support','Gut lining repair'],
+    warnings:[]
+  },
+
+  // LIQUIDS
+  { id:'espresso', name:'Espresso Shot', emoji:'☕', cat:'Liquids', serving:'1 shot (30ml)', g:30,
+    macros:{cal:2,protein:0.1,fat:0.1,carb:0.3,fiber:0,sugar:0},
+    micros:{magnesium:6,potassium:34,vitB3:0.2},
+    compounds:{caffeine:63,chlorogenicAcid:45,trigonelline:12,kahweol:2},
+    color:'#3c1e0a', benefits:['Mental alertness','Fat oxidation','Liver protection'],
+    warnings:[{cond:'Anxiety disorders',note:'High caffeine may trigger or worsen anxiety/panic',type:'warn'},
+              {cond:'GERD / Acid reflux',note:'Increases stomach acid production',type:'warn'},
+              {cond:'Hypertension',note:'Caffeine can temporarily raise blood pressure',type:'warn'}]
+  },
+  { id:'green_tea', name:'Green Tea', emoji:'🍵', cat:'Liquids', serving:'1 cup (240ml)', g:240,
+    macros:{cal:2,protein:0.5,fat:0,carb:0.3,fiber:0,sugar:0},
+    micros:{manganese:0.4,potassium:20},
+    compounds:{egcg:70,lTheanine:8,caffeine:28,catechins:120},
+    color:'#b8d4a0', benefits:['Calm focus','Metabolism boost','Cancer-protective'],
+    warnings:[{cond:'Iron deficiency',note:'Tannins inhibit non-heme iron absorption',type:'warn'}]
+  },
+  { id:'coconut_water', name:'Coconut Water', emoji:'🥥', cat:'Liquids', serving:'1 cup (240ml)', g:240,
+    macros:{cal:46,protein:1.7,fat:0.5,carb:9,fiber:2.6,sugar:6},
+    micros:{potassium:600,sodium:252,magnesium:60,calcium:58,phosphorus:48},
+    compounds:{cytokinins:0.04,auxins:0.01},
+    color:'#f0f0e8', benefits:['Natural electrolytes','Hydration','Blood pressure support'],
+    warnings:[{cond:'Kidney disease',note:'Extremely high potassium — dangerous with impaired kidneys',type:'danger'},
+              {cond:'Pre-surgery',note:'May affect blood pressure control during surgery',type:'warn'}]
+  },
+];
+
+// ====================== COMPOUND INTERACTIONS ======================
+const INTERACTIONS = [
+  {compounds:['curcumin','piperine'], type:'good', title:'Curcumin + Piperine Synergy',
+   msg:'Piperine increases curcumin bioavailability by up to 2000%. Excellent pairing!'},
+  {compounds:['caffeine','lTheanine'], type:'good', title:'Caffeine + L-Theanine Synergy',
+   msg:'L-Theanine smooths caffeine jitters, promoting calm focus and sustained attention.'},
+  {compounds:['vitC','iron'], type:'good', title:'Vitamin C + Iron Synergy',
+   msg:'Vitamin C dramatically enhances non-heme iron absorption. Great combination!'},
+  {compounds:['oleicAcid','betaCarotene'], type:'good', title:'Fat + Beta-Carotene Synergy',
+   msg:'Healthy fats greatly improve absorption of fat-soluble beta-carotene.'},
+  {compounds:['oleicAcid','lutein'], type:'good', title:'Fat + Lutein Synergy',
+   msg:'Dietary fats enhance absorption of lutein for eye health.'},
+  {compounds:['calcium','iron'], type:'warn', title:'Calcium vs Iron Competition',
+   msg:'Calcium and iron compete for absorption. Consider separating their intake for maximum benefit.'},
+  {compounds:['egcg','iron'], type:'warn', title:'EGCG Inhibits Iron Absorption',
+   msg:'Green tea catechins (EGCG) can significantly reduce non-heme iron absorption by 60-90%.'},
+  {compounds:['caffeine','caffeine'], type:'warn', title:'High Caffeine Load',
+   msg:'Multiple caffeine sources detected. Total may exceed 200mg — monitor intake.',
+   check:(items) => {
+     let total = 0;
+     items.forEach(i => { if(i.compounds.caffeine) total += i.compounds.caffeine * i.qty; });
+     return total > 150;
+   }},
+  {compounds:['coumarin','coumarin'], type:'warn', title:'Coumarin Accumulation',
+   msg:'Multiple coumarin sources. Daily limit is ~5mg for a 70kg person. Excess is hepatotoxic.'},
+];
+
+// ====================== DISEASE FLAGS ======================
+const DISEASE_CHECKS = [
+  {condition:'High Blood Pressure (Hypertension)',
+   check:(totals) => {
+     const flags = [];
+     if(totals.micros.sodium > 400) flags.push('High sodium content ('+Math.round(totals.micros.sodium)+'mg)');
+     if(totals.compounds.caffeine > 100) flags.push('Caffeine may raise blood pressure temporarily');
+     return flags;
+   },
+   positives:(totals) => {
+     const p = [];
+     if(totals.micros.potassium > 300) p.push('Good potassium content helps regulate blood pressure');
+     if(totals.compounds.anthocyanins > 50) p.push('Anthocyanins linked to lower blood pressure');
+     return p;
+   }},
+  {condition:'High Cholesterol',
+   check:(totals) => {
+     const flags = [];
+     if(totals.macros.fat > 25 && totals.compounds.lauricAcid > 2000) flags.push('High saturated fat from coconut — may raise LDL');
+     return flags;
+   },
+   positives:(totals) => {
+     const p = [];
+     if(totals.compounds.betaGlucan > 500) p.push('Beta-glucan from oats actively lowers LDL cholesterol');
+     if(totals.compounds.betaSitosterol > 20) p.push('Plant sterols help block cholesterol absorption');
+     if(totals.macros.fiber > 5) p.push('Good fiber content supports cholesterol management');
+     return p;
+   }},
+  {condition:'Type 2 Diabetes',
+   check:(totals) => {
+     const flags = [];
+     if(totals.macros.sugar > 30) flags.push('High total sugar ('+Math.round(totals.macros.sugar)+'g) — monitor blood glucose');
+     if(totals.macros.sugar > 20 && totals.macros.fiber < 3) flags.push('High sugar with low fiber = rapid glucose spike');
+     return flags;
+   },
+   positives:(totals) => {
+     const p = [];
+     if(totals.compounds.cinnamaldehyde > 5) p.push('Cinnamon compounds may improve insulin sensitivity');
+     if(totals.macros.fiber > 8) p.push('High fiber slows glucose absorption');
+     if(totals.compounds.anthocyanins > 50) p.push('Anthocyanins may improve insulin signaling');
+     return p;
+   }},
+  {condition:'Kidney Disease',
+   check:(totals) => {
+     const flags = [];
+     if(totals.micros.potassium > 600) flags.push('⚠ Very high potassium ('+Math.round(totals.micros.potassium)+'mg) — dangerous with impaired kidneys');
+     if(totals.macros.protein > 25) flags.push('High protein load may strain kidneys');
+     if(totals.micros.phosphorus > 300) flags.push('High phosphorus — restrict with kidney disease');
+     return flags;
+   },
+   positives:() => []
+  },
+];
+
+// ====================== STATE ======================
+const DRINK_TYPES = ['Smoothie','Yogurt Bowl','Coffee','Juice','Shake'];
+let currentCategory = 'All';
+let currentDrinkType = 'Smoothie';
+let mix = []; // {id, qty} where qty is number of servings
+
+// ====================== INIT ======================
+function init() {
+  renderCategories();
+  renderIngredients();
+  renderDrinkTypes();
+  renderMix();
+  renderGlass();
+  renderAnalysis();
+}
+
+function renderCategories() {
+  const cats = ['All', ...new Set(INGREDIENTS.map(i => i.cat))];
+  document.getElementById('categories').innerHTML = cats.map(c =>
+    `<button class="cat-btn ${c === currentCategory ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`
+  ).join('');
+}
+
+function setCategory(c) {
+  currentCategory = c;
+  renderCategories();
+  renderIngredients();
+}
+
+function filterIngredients() { renderIngredients(); }
+
+function renderIngredients() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let items = INGREDIENTS;
+  if(currentCategory !== 'All') items = items.filter(i => i.cat === currentCategory);
+  if(q) items = items.filter(i => i.name.toLowerCase().includes(q));
+
+  document.getElementById('ingredientList').innerHTML = items.map(i => `
+    <div class="ingredient-item" ondblclick="addToMix('${i.id}')">
+      <div class="ing-emoji">${i.emoji}</div>
+      <div class="ing-info">
+        <div class="ing-name">${i.name}</div>
+        <div class="ing-meta">${i.serving} · ${i.macros.cal} cal</div>
+      </div>
+      <button class="ing-add" onclick="addToMix('${i.id}')" title="Add to mix">+</button>
+    </div>
+  `).join('');
+}
+
+function renderDrinkTypes() {
+  document.getElementById('drinkTypes').innerHTML = DRINK_TYPES.map(d =>
+    `<button class="drink-type-btn ${d === currentDrinkType ? 'active' : ''}" onclick="setDrinkType('${d}')">${d}</button>`
+  ).join('');
+}
+
+function setDrinkType(d) { currentDrinkType = d; renderDrinkTypes(); renderGlass(); }
+
+// ====================== MIX MANAGEMENT ======================
+function addToMix(id) {
+  const existing = mix.find(m => m.id === id);
+  if(existing) { existing.qty += 1; }
+  else { mix.push({id, qty: 1}); }
+  renderMix(); renderGlass(); renderAnalysis();
+}
+
+function removeFromMix(id) {
+  mix = mix.filter(m => m.id !== id);
+  renderMix(); renderGlass(); renderAnalysis();
+}
+
+function adjustQty(id, delta) {
+  const item = mix.find(m => m.id === id);
+  if(!item) return;
+  item.qty = Math.max(0.25, Math.round((item.qty + delta) * 4) / 4);
+  renderMix(); renderGlass(); renderAnalysis();
+}
+
+function getIng(id) { return INGREDIENTS.find(i => i.id === id); }
+
+function renderMix() {
+  const el = document.getElementById('mixItems');
+  if(mix.length === 0) {
+    el.innerHTML = `<div class="empty-mix"><div class="big">🧪</div>Add ingredients from the left panel<br>to start creating your drink</div>`;
+    return;
+  }
+  el.innerHTML = mix.map(m => {
+    const ing = getIng(m.id);
+    return `<div class="mix-item">
+      <div class="ing-emoji">${ing.emoji}</div>
+      <div class="mix-item-name">${ing.name}</div>
+      <div class="mix-qty">
+        <button onclick="adjustQty('${m.id}',-0.25)">−</button>
+        <span class="mix-qty-val">${m.qty}× ${ing.serving.split('(')[0].trim()}</span>
+        <button onclick="adjustQty('${m.id}',0.25)">+</button>
+      </div>
+      <button class="mix-remove" onclick="removeFromMix('${m.id}')">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ====================== GLASS VISUALIZATION ======================
+function renderGlass() {
+  const container = document.getElementById('glassContainer');
+  if(mix.length === 0) {
+    container.innerHTML = `<svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="glassShine" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.08)"/>
+          <stop offset="40%" stop-color="rgba(255,255,255,0.02)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0.06)"/>
+        </linearGradient>
+      </defs>
+      <path d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"
+        fill="url(#glassShine)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+      <text x="100" y="180" text-anchor="middle" fill="rgba(255,255,255,0.1)" font-size="40">🥤</text>
+    </svg>`;
+    return;
+  }
+
+  // Calculate blended color
+  let totalG = 0;
+  mix.forEach(m => { const ing = getIng(m.id); totalG += ing.g * m.qty; });
+
+  let r=0, g=0, b=0;
+  mix.forEach(m => {
+    const ing = getIng(m.id);
+    const weight = (ing.g * m.qty) / totalG;
+    const c = hexToRgb(ing.color);
+    r += c.r * weight;
+    g += c.g * weight;
+    b += c.b * weight;
+  });
+  const blendedColor = `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+  const lighterColor = `rgb(${Math.min(255,Math.round(r*1.3))},${Math.min(255,Math.round(g*1.3))},${Math.min(255,Math.round(b*1.3))})`;
+  const darkerColor = `rgb(${Math.round(r*0.6)},${Math.round(g*0.6)},${Math.round(b*0.6)})`;
+
+  // Fill level based on total grams (max around 600g)
+  const fillPct = Math.min(0.9, totalG / 600);
+  const fillTop = 280 - fillPct * 240;
+
+  // Calculate glass width at fill top
+  const leftAtTop = 45 + (35 - 45) * ((fillTop - 40) / (280 - 40)); // actually let me recalc
+  const lTop = 45 + (35-45) * (280-40 - (280-fillTop)) / (280-40);
+  const rTop = 155 + (165-155) * (280-40 - (280-fillTop)) / (280-40);
+  const lT = 45 - (45-35) * ((fillTop-40)/(280-40));
+  const rT = 155 + (165-155) * ((fillTop-40)/(280-40));
+
+  // Build layers for visual interest
+  const layers = mix.map(m => {
+    const ing = getIng(m.id);
+    return { color: ing.color, weight: (ing.g * m.qty) / totalG, name: ing.name };
+  });
+
+  container.innerHTML = `<svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="drinkGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${lighterColor}"/>
+        <stop offset="60%" stop-color="${blendedColor}"/>
+        <stop offset="100%" stop-color="${darkerColor}"/>
+      </linearGradient>
+      <linearGradient id="glassShine2" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.1)"/>
+        <stop offset="30%" stop-color="rgba(255,255,255,0.02)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,0.07)"/>
+      </linearGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <clipPath id="glassClip">
+        <path d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"/>
+      </clipPath>
+    </defs>
+
+    <!-- Liquid -->
+    <g clip-path="url(#glassClip)">
+      <rect x="20" y="${fillTop}" width="170" height="${300-fillTop}" fill="url(#drinkGrad)"/>
+      <!-- Texture dots -->
+      ${mix.map((m,i) => {
+        const ing = getIng(m.id);
+        let dots = '';
+        const count = Math.min(8, Math.ceil(m.qty * 3));
+        for(let d=0; d<count; d++) {
+          const cx = 55 + Math.random()*90;
+          const cy = fillTop + 10 + Math.random()*(280-fillTop-20);
+          const cr = 2 + Math.random()*4;
+          dots += `<circle cx="${cx}" cy="${cy}" r="${cr}" fill="${ing.color}" opacity="0.35"/>`;
+        }
+        return dots;
+      }).join('')}
+      <!-- Surface foam/froth line -->
+      <ellipse cx="100" cy="${fillTop}" rx="60" ry="6" fill="${lighterColor}" opacity="0.5"/>
+      <!-- Bubbles -->
+      ${[...Array(6)].map((_,i) => {
+        const cx = 60+Math.random()*80;
+        const cy = fillTop+20+Math.random()*(250-fillTop);
+        return `<circle cx="${cx}" cy="${cy}" r="${1+Math.random()*2}" fill="rgba(255,255,255,0.15)">
+          <animate attributeName="cy" from="${cy}" to="${fillTop}" dur="${2+Math.random()*3}s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" from="0.15" to="0" dur="${2+Math.random()*3}s" repeatCount="indefinite"/>
+        </circle>`;
+      }).join('')}
+    </g>
+
+    <!-- Glass outline -->
+    <path d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"
+      fill="url(#glassShine2)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+
+    <!-- Straw -->
+    <rect x="118" y="10" width="6" height="${Math.max(fillTop,60)+20}" rx="3"
+      fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+
+    <!-- Volume label -->
+    <text x="100" y="${Math.max(30, fillTop-12)}" text-anchor="middle"
+      font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(255,255,255,0.5)">
+      ${Math.round(totalG)}${totalG > 200 ? 'ml' : 'g'}
+    </text>
+  </svg>`;
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return {r,g,b};
+}
+
+// ====================== ANALYSIS ======================
+function renderAnalysis() {
+  const el = document.getElementById('analysisPanel');
+  if(mix.length === 0) {
+    el.innerHTML = `<div class="analysis-empty">
+      <div style="font-size:32px;margin-bottom:12px">📊</div>
+      Nutritional analysis will appear<br>here as you add ingredients
+    </div>`;
+    return;
+  }
+
+  // Compute totals
+  const totals = { macros:{cal:0,protein:0,fat:0,carb:0,fiber:0,sugar:0}, micros:{}, compounds:{} };
+  const allBenefits = new Set();
+  const allWarnings = [];
+
+  mix.forEach(m => {
+    const ing = getIng(m.id);
+    const q = m.qty;
+    // Macros
+    Object.keys(ing.macros).forEach(k => totals.macros[k] += ing.macros[k] * q);
+    // Micros
+    Object.keys(ing.micros).forEach(k => {
+      totals.micros[k] = (totals.micros[k]||0) + ing.micros[k] * q;
+    });
+    // Compounds
+    Object.keys(ing.compounds).forEach(k => {
+      totals.compounds[k] = (totals.compounds[k]||0) + ing.compounds[k] * q;
+    });
+    // Benefits
+    ing.benefits.forEach(b => allBenefits.add(b));
+    // Warnings
+    ing.warnings.forEach(w => allWarnings.push({...w, source: ing.name}));
+  });
+
+  // Check interactions
+  const activeInteractions = [];
+  const compoundKeys = Object.keys(totals.compounds).filter(k => totals.compounds[k] > 0);
+  INTERACTIONS.forEach(inter => {
+    if(inter.check) {
+      const enriched = mix.map(m => ({...getIng(m.id), qty: m.qty}));
+      if(inter.check(enriched)) activeInteractions.push(inter);
+    } else {
+      const allPresent = inter.compounds.every(c => compoundKeys.includes(c));
+      if(allPresent) activeInteractions.push(inter);
+    }
+  });
+
+  // Disease checks
+  const diseaseAlerts = [];
+  DISEASE_CHECKS.forEach(dc => {
+    const flags = dc.check(totals);
+    const positives = dc.positives(totals);
+    if(flags.length || positives.length) {
+      diseaseAlerts.push({condition: dc.condition, flags, positives});
+    }
+  });
+
+  // Compound display names
+  const COMPOUND_NAMES = {
+    curcumin:'Curcumin', piperine:'Piperine', caffeine:'Caffeine', lTheanine:'L-Theanine',
+    egcg:'EGCG', anthocyanins:'Anthocyanins', pterostilbene:'Pterostilbene', quercetin:'Quercetin',
+    chlorogenicAcid:'Chlorogenic Acid', gingerol:'Gingerol', cinnamaldehyde:'Cinnamaldehyde',
+    bromelain:'Bromelain', phycocyanin:'Phycocyanin', betaGlucan:'Beta-Glucan',
+    lauricAcid:'Lauric Acid', oleicAcid:'Oleic Acid', betaSitosterol:'Beta-Sitosterol',
+    lutein:'Lutein', glutathione:'Glutathione', dopamine:'Dopamine', serotonin:'Serotonin',
+    tryptophan:'Tryptophan', resistantStarch:'Resistant Starch', mangiferin:'Mangiferin',
+    betaCarotene:'Beta-Carotene', ellagicAcid:'Ellagic Acid', pelargonidin:'Pelargonidin',
+    fisetin:'Fisetin', coumarin:'Coumarin', eugenol:'Eugenol', proanthocyanidins:'Proanthocyanidins',
+    chlorophyll:'Chlorophyll', catechins:'Catechins', ala:'ALA (Omega-3)', lignans:'Lignans',
+    betaCaryophyllene:'Beta-Caryophyllene', avenanthramides:'Avenanthramides',
+    lactoferrin:'Lactoferrin', bcaa:'BCAAs', leucine:'Leucine', hydroxyproline:'Hydroxyproline',
+    glycine:'Glycine', proline:'Proline', shogaol:'Shogaol', zingerone:'Zingerone',
+    ferulic:'Ferulic Acid', mct:'MCTs', capricAcid:'Capric Acid', resveratrol:'Resveratrol',
+    pCoumaricAcid:'p-Coumaric Acid', coq10:'CoQ10', gla:'GLA', trigonelline:'Trigonelline',
+    kahweol:'Kahweol', chrysin:'Chrysin', pinocembrin:'Pinocembrin',
+    methylglyoxal:'Methylglyoxal', zeaxanthin:'Zeaxanthin', gallicAcid:'Gallic Acid',
+    turmerone:'Turmerone', demethoxycurcumin:'Demethoxycurcumin', alphaTocopherol:'Alpha-Tocopherol',
+    immunoglobulins:'Immunoglobulins', sdi:'SDI', probiotics:'Probiotics',
+    casein:'Casein', wheyProtein:'Whey Protein', cla:'CLA', cytokinins:'Cytokinins',
+    kaempferol:'Kaempferol', quebecol:'Quebecol', inulin:'Inulin',
+    hydrogenPeroxide:'Hydrogen Peroxide', auxins:'Auxins', zingiberene:'Zingiberene',
+  };
+
+  // Micro display
+  const MICRO_NAMES = {
+    vitC:'Vitamin C', vitK:'Vitamin K', vitE:'Vitamin E', vitA:'Vitamin A', vitD:'Vitamin D',
+    vitB6:'Vitamin B6', vitB12:'Vitamin B12', vitB3:'Niacin (B3)',
+    folate:'Folate', calcium:'Calcium', iron:'Iron', potassium:'Potassium',
+    magnesium:'Magnesium', manganese:'Manganese', zinc:'Zinc', copper:'Copper',
+    phosphorus:'Phosphorus', sodium:'Sodium', thiamin:'Thiamin',
+  };
+  const MICRO_UNITS = {
+    vitC:'mg', vitK:'µg', vitE:'mg', vitA:'µg', vitD:'µg', vitB6:'mg', vitB12:'µg', vitB3:'mg',
+    folate:'µg', calcium:'mg', iron:'mg', potassium:'mg', magnesium:'mg', manganese:'mg',
+    zinc:'mg', copper:'mg', phosphorus:'mg', sodium:'mg', thiamin:'mg',
+  };
+  // RDA for % bar
+  const MICRO_RDA = {
+    vitC:90, vitK:120, vitE:15, vitA:900, vitD:20, vitB6:1.7, vitB12:2.4, vitB3:16,
+    folate:400, calcium:1000, iron:18, potassium:2600, magnesium:420, manganese:2.3,
+    zinc:11, copper:0.9, phosphorus:700, sodium:2300, thiamin:1.2,
+  };
+
+  let html = '';
+
+  // MACROS
+  html += `<div class="analysis-section">
+    <div class="section-label">⚡ Macronutrients</div>
+    <div class="macro-grid">
+      <div class="macro-card"><div class="macro-val">${Math.round(totals.macros.cal)}<span class="macro-unit"> kcal</span></div><div class="macro-name">Calories</div></div>
+      <div class="macro-card"><div class="macro-val">${totals.macros.protein.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Protein</div></div>
+      <div class="macro-card"><div class="macro-val">${totals.macros.fat.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Fat</div></div>
+      <div class="macro-card"><div class="macro-val">${totals.macros.carb.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Carbs</div></div>
+      <div class="macro-card"><div class="macro-val">${totals.macros.fiber.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Fiber</div></div>
+      <div class="macro-card"><div class="macro-val">${totals.macros.sugar.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Sugar</div></div>
+    </div>
+  </div>`;
+
+  // MICRONUTRIENTS
+  const activeMicros = Object.keys(totals.micros).filter(k => totals.micros[k] > 0.01).sort((a,b) => {
+    const pctA = (totals.micros[a] / (MICRO_RDA[a]||1)) * 100;
+    const pctB = (totals.micros[b] / (MICRO_RDA[b]||1)) * 100;
+    return pctB - pctA;
+  });
+  if(activeMicros.length) {
+    html += `<div class="analysis-section">
+      <div class="section-label">💊 Micronutrients</div>
+      <div class="compound-list">${activeMicros.map(k => {
+        const val = totals.micros[k];
+        const pct = Math.min(100, (val / (MICRO_RDA[k]||1)) * 100);
+        return `<div class="compound-row">
+          <span class="compound-name">${MICRO_NAMES[k]||k}</span>
+          <span class="compound-val">${val < 1 ? val.toFixed(2) : val.toFixed(1)} ${MICRO_UNITS[k]||''}</span>
+          <div class="compound-bar-wrap"><div class="compound-bar" style="width:${pct}%;background:${pct>80?'var(--good)':pct>40?'var(--accent)':'var(--text-muted)'}"></div></div>
+          <span class="compound-val" style="width:36px;text-align:right;color:${pct>80?'var(--good)':'var(--text-muted)'}">${Math.round(pct)}%</span>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }
+
+  // KEY COMPOUNDS
+  const activeCompounds = Object.keys(totals.compounds)
+    .filter(k => totals.compounds[k] > 0.01)
+    .sort((a,b) => totals.compounds[b] - totals.compounds[a])
+    .slice(0, 12);
+  if(activeCompounds.length) {
+    const maxVal = Math.max(...activeCompounds.map(k => totals.compounds[k]));
+    html += `<div class="analysis-section">
+      <div class="section-label">🧬 Key Compounds</div>
+      <div class="compound-list">${activeCompounds.map(k => {
+        const val = totals.compounds[k];
+        const pct = (val / maxVal) * 100;
+        return `<div class="compound-row">
+          <span class="compound-name">${COMPOUND_NAMES[k]||k}</span>
+          <span class="compound-val">${val >= 1000 ? (val/1000).toFixed(1)+'g' : val >= 1 ? val.toFixed(1)+'mg' : (val*1000).toFixed(0)+'µg'}</span>
+          <div class="compound-bar-wrap"><div class="compound-bar" style="width:${pct}%"></div></div>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }
+
+  // INTERACTIONS
+  if(activeInteractions.length) {
+    html += `<div class="analysis-section">
+      <div class="section-label">⚗️ Compound Interactions</div>
+      ${activeInteractions.map(inter => `
+        <div class="alert-card ${inter.type}">
+          <div class="alert-icon">${inter.type==='good'?'✦':'⚠'}</div>
+          <div class="alert-text"><strong>${inter.title}</strong>${inter.msg}</div>
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  // WARNINGS
+  if(allWarnings.length) {
+    html += `<div class="analysis-section">
+      <div class="section-label">🚨 Condition Alerts</div>
+      ${allWarnings.map(w => `
+        <div class="alert-card ${w.type}">
+          <div class="alert-icon">${w.type==='danger'?'🛑':'⚠'}</div>
+          <div class="alert-text"><strong>${w.cond}</strong>${w.note}<br><span style="opacity:0.6;font-size:11px">from ${w.source}</span></div>
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  // DISEASE IMPACT
+  if(diseaseAlerts.length) {
+    html += `<div class="analysis-section">
+      <div class="section-label">🏥 Health Condition Impact</div>
+      ${diseaseAlerts.map(da => `
+        <div style="margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text)">${da.condition}</div>
+          ${da.flags.map(f => `<div class="alert-card warn" style="margin-bottom:4px"><div class="alert-icon">⚠</div><div class="alert-text">${f}</div></div>`).join('')}
+          ${da.positives.map(p => `<div class="alert-card good" style="margin-bottom:4px"><div class="alert-icon">✦</div><div class="alert-text">${p}</div></div>`).join('')}
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  // BENEFITS
+  if(allBenefits.size) {
+    html += `<div class="analysis-section">
+      <div class="section-label">✨ Combined Benefits</div>
+      <div class="benefit-tags">${[...allBenefits].map(b => `<span class="benefit-tag">${b}</span>`).join('')}</div>
+    </div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+// Boot
+init();
+</script>
+</body>
+</html>
