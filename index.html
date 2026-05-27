@@ -2,8 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>MixLab — Drink Innovation System</title>
+<meta name="description" content="Explore drink ingredient combinations and instantly see their nutrition, active compounds, and safety flags.">
+<link rel="canonical" href="https://mixlab.sankhacooray.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MixLab">
+<meta property="og:title" content="MixLab — Drink Innovation System">
+<meta property="og:description" content="Explore drink ingredient combinations and instantly see their nutrition, active compounds, and safety flags.">
+<meta property="og:url" content="https://mixlab.sankhacooray.com/">
+<meta property="og:image" content="https://mixlab.sankhacooray.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MixLab — a green Erlenmeyer flask beside the words ‘Drink Innovation System’.">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MixLab — Drink Innovation System">
+<meta name="twitter:description" content="Explore drink ingredient combinations and instantly see their nutrition, active compounds, and safety flags.">
+<meta name="twitter:image" content="https://mixlab.sankhacooray.com/og-image.png">
+<meta name="twitter:image:alt" content="MixLab — a green Erlenmeyer flask beside the words ‘Drink Innovation System’.">
+
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0a0a0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MixLab">
+
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1206,6 +1236,12 @@ function renderAnalysis() {
 
 // Boot
 init();
+
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
