@@ -138,13 +138,16 @@ body {
 }
 .search-box input:focus { border-color: var(--accent); }
 .search-box::before {
-  content: '⌕';
+  content: '';
   position: absolute;
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--text-muted);
-  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--text-muted);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21 21-4.34-4.34'/%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21 21-4.34-4.34'/%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3C/svg%3E") center/contain no-repeat;
 }
 
 /* Categories */
@@ -787,7 +790,7 @@ const DISEASE_CHECKS = [
   {condition:'Kidney Disease',
    check:(totals) => {
      const flags = [];
-     if(totals.micros.potassium > 600) flags.push('⚠ Very high potassium ('+Math.round(totals.micros.potassium)+'mg) — dangerous with impaired kidneys');
+     if(totals.micros.potassium > 600) flags.push('Very high potassium ('+Math.round(totals.micros.potassium)+'mg) — dangerous with impaired kidneys');
      if(totals.macros.protein > 25) flags.push('High protein load may strain kidneys');
      if(totals.micros.phosphorus > 300) flags.push('High phosphorus — restrict with kidney disease');
      return flags;
@@ -878,7 +881,7 @@ function getIng(id) { return INGREDIENTS.find(i => i.id === id); }
 function renderMix() {
   const el = document.getElementById('mixItems');
   if(mix.length === 0) {
-    el.innerHTML = `<div class="empty-mix"><div class="big">🧪</div>Add ingredients from the left panel<br>to start creating your drink</div>`;
+    el.innerHTML = `<div class="empty-mix"><div class="big"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7 6.82 21.18a2.83 2.83 0 0 1-3.99-.01a2.83 2.83 0 0 1 0-4L17 3"/><path d="m16 2 6 6"/><path d="M12 16H4"/></svg></div>Add ingredients from the left panel<br>to start creating your drink</div>`;
     return;
   }
   el.innerHTML = mix.map(m => {
@@ -1026,7 +1029,7 @@ function renderAnalysis() {
   const el = document.getElementById('analysisPanel');
   if(mix.length === 0) {
     el.innerHTML = `<div class="analysis-empty">
-      <div style="font-size:32px;margin-bottom:12px">📊</div>
+      <div style="margin-bottom:12px"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></div>
       Nutritional analysis will appear<br>here as you add ingredients
     </div>`;
     return;
@@ -1129,7 +1132,7 @@ function renderAnalysis() {
 
   // MACROS
   html += `<div class="analysis-section">
-    <div class="section-label">⚡ Macronutrients</div>
+    <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Macronutrients</div>
     <div class="macro-grid">
       <div class="macro-card"><div class="macro-val">${Math.round(totals.macros.cal)}<span class="macro-unit"> kcal</span></div><div class="macro-name">Calories</div></div>
       <div class="macro-card"><div class="macro-val">${totals.macros.protein.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Protein</div></div>
@@ -1148,7 +1151,7 @@ function renderAnalysis() {
   });
   if(activeMicros.length) {
     html += `<div class="analysis-section">
-      <div class="section-label">💊 Micronutrients</div>
+      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>Micronutrients</div>
       <div class="compound-list">${activeMicros.map(k => {
         const val = totals.micros[k];
         const pct = Math.min(100, (val / (MICRO_RDA[k]||1)) * 100);
@@ -1170,7 +1173,7 @@ function renderAnalysis() {
   if(activeCompounds.length) {
     const maxVal = Math.max(...activeCompounds.map(k => totals.compounds[k]));
     html += `<div class="analysis-section">
-      <div class="section-label">🧬 Key Compounds</div>
+      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="m10 16 1.5 1.5"/><path d="m14 8-1.5-1.5"/><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/><path d="m16.5 10.5 1 1"/><path d="m17 6-2.891-2.891"/><path d="M2 15c6.667-6 13.333 0 20-6"/><path d="m20 9 .891.891"/><path d="M3.109 14.109 4 15"/><path d="m6.5 12.5 1 1"/><path d="m7 18 2.891 2.891"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/></svg>Key Compounds</div>
       <div class="compound-list">${activeCompounds.map(k => {
         const val = totals.compounds[k];
         const pct = (val / maxVal) * 100;
@@ -1186,10 +1189,10 @@ function renderAnalysis() {
   // INTERACTIONS
   if(activeInteractions.length) {
     html += `<div class="analysis-section">
-      <div class="section-label">⚗️ Compound Interactions</div>
+      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>Compound Interactions</div>
       ${activeInteractions.map(inter => `
         <div class="alert-card ${inter.type}">
-          <div class="alert-icon">${inter.type==='good'?'✦':'⚠'}</div>
+          <div class="alert-icon">${inter.type==='good'?'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>':'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>'}</div>
           <div class="alert-text"><strong>${inter.title}</strong>${inter.msg}</div>
         </div>
       `).join('')}
@@ -1199,10 +1202,10 @@ function renderAnalysis() {
   // WARNINGS
   if(allWarnings.length) {
     html += `<div class="analysis-section">
-      <div class="section-label">🚨 Condition Alerts</div>
+      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z"/><path d="M21 12h1"/><path d="M18.5 4.5 18 5"/><path d="M2 12h1"/><path d="M12 2v1"/><path d="m4.929 4.929.707.707"/><path d="M12 12v6"/></svg>Condition Alerts</div>
       ${allWarnings.map(w => `
         <div class="alert-card ${w.type}">
-          <div class="alert-icon">${w.type==='danger'?'🛑':'⚠'}</div>
+          <div class="alert-icon">${w.type==='danger'?'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16h.01"/><path d="M12 8v4"/><path d="M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z"/></svg>':'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>'}</div>
           <div class="alert-text"><strong>${w.cond}</strong>${w.note}<br><span style="opacity:0.6;font-size:11px">from ${w.source}</span></div>
         </div>
       `).join('')}
@@ -1212,12 +1215,12 @@ function renderAnalysis() {
   // DISEASE IMPACT
   if(diseaseAlerts.length) {
     html += `<div class="analysis-section">
-      <div class="section-label">🏥 Health Condition Impact</div>
+      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>Health Condition Impact</div>
       ${diseaseAlerts.map(da => `
         <div style="margin-bottom:10px">
           <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text)">${da.condition}</div>
-          ${da.flags.map(f => `<div class="alert-card warn" style="margin-bottom:4px"><div class="alert-icon">⚠</div><div class="alert-text">${f}</div></div>`).join('')}
-          ${da.positives.map(p => `<div class="alert-card good" style="margin-bottom:4px"><div class="alert-icon">✦</div><div class="alert-text">${p}</div></div>`).join('')}
+          ${da.flags.map(f => `<div class="alert-card warn" style="margin-bottom:4px"><div class="alert-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div><div class="alert-text">${f}</div></div>`).join('')}
+          ${da.positives.map(p => `<div class="alert-card good" style="margin-bottom:4px"><div class="alert-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg></div><div class="alert-text">${p}</div></div>`).join('')}
         </div>
       `).join('')}
     </div>`;
@@ -1226,7 +1229,7 @@ function renderAnalysis() {
   // BENEFITS
   if(allBenefits.size) {
     html += `<div class="analysis-section">
-      <div class="section-label">✨ Combined Benefits</div>
+      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>Combined Benefits</div>
       <div class="benefit-tags">${[...allBenefits].map(b => `<span class="benefit-tag">${b}</span>`).join('')}</div>
     </div>`;
   }
