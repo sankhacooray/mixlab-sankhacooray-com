@@ -1,7 +1,8 @@
 {
+  "id": "/",
   "name": "MixLab — Drink Innovation System",
   "short_name": "MixLab",
-  "description": "Explore drink ingredient combinations and instantly see their nutrition, active compounds, and safety flags.",
+  "description": "Explore drink ingredient combinations and instantly see their nutrition, active compounds, caffeine and sugar load, and safety flags for every mix.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -9,11 +10,34 @@
   "theme_color": "#0a0a0c",
   "background_color": "#0a0a0c",
   "lang": "en",
-  "categories": ["food", "health", "productivity"],
+  "categories": [
+    "food",
+    "health",
+    "productivity"
+  ],
   "icons": [
-    { "src": "icon.svg",     "sizes": "any",     "type": "image/svg+xml" },
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
