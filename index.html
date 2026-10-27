@@ -70,6 +70,7 @@
   --glass-stroke: rgba(30,40,20,0.28);
   --glass-fill: rgba(30,40,20,0.04);
   --glass-label: rgba(30,40,20,0.55);
+  --straw: #e2574c; --bowl-a: #d9d3c4; --bowl-b: #f7f3ea; --bowl-c: #cfc7b4; --bowl-in: #ece6d8;
   --page-bg: #f5f6f0;
   --radius: 12px;
   --radius-sm: 8px;
@@ -84,7 +85,7 @@
   --good: #6bdfb8; --good-bg: rgba(107,223,184,0.08); --good-border: rgba(107,223,184,0.2);
   --info: #7eb8ff; --card-hover: #1c1c26; --float: rgba(19,19,24,0.82); --float-shadow: 0 10px 30px -12px rgba(0,0,0,.6);
   --glass-stroke: rgba(255,255,255,0.18); --glass-fill: rgba(255,255,255,0.06); --glass-label: rgba(255,255,255,0.5);
-  --page-bg: #0a0a0c; color-scheme: dark;
+  --page-bg: #0a0a0c; --straw: #e8665a; --bowl-a: #3a3a44; --bowl-b: #5a5a66; --bowl-c: #2c2c34; --bowl-in: #44444f; color-scheme: dark;
 } }
 :root[data-theme="dark"] {
   --bg: #0a0a0c; --surface: #131318; --surface2: #1a1a22; --surface3: #22222e; --border: #2a2a38;
@@ -95,7 +96,7 @@
   --good: #6bdfb8; --good-bg: rgba(107,223,184,0.08); --good-border: rgba(107,223,184,0.2);
   --info: #7eb8ff; --card-hover: #1c1c26; --float: rgba(19,19,24,0.82); --float-shadow: 0 10px 30px -12px rgba(0,0,0,.6);
   --glass-stroke: rgba(255,255,255,0.18); --glass-fill: rgba(255,255,255,0.06); --glass-label: rgba(255,255,255,0.5);
-  --page-bg: #0a0a0c; color-scheme: dark;
+  --page-bg: #0a0a0c; --straw: #e8665a; --bowl-a: #3a3a44; --bowl-b: #5a5a66; --bowl-c: #2c2c34; --bowl-in: #44444f; color-scheme: dark;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 /* rules 14, 33, 36: nothing scrolls, no bounce */
@@ -139,8 +140,9 @@ button { font: inherit; color: inherit; }
 .verdict .lbl { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
 .verdict .nm { font-family: 'Instrument Serif', serif; font-size: 26px; line-height: 1.1; color: var(--accent); }
 .verdict.idle .nm { color: var(--text-muted); font-size: 22px; }
-.clear-btn { position: absolute; top: 60px; right: 12px; }   /* beside the answer, clear of the type pills */
-.glass-container { flex: none; width: 150px; height: 200px; display: grid; place-items: center; }
+.clear-btn { all: unset; cursor: pointer; display: inline-grid; place-items: center; width: 20px; height: 20px; margin-left: 6px; vertical-align: -5px; border-radius: 50%; color: var(--text-dim); background: var(--surface2); }
+.clear-btn:hover { color: var(--text); background: var(--accent-soft); }
+.glass-container { flex: none; width: 170px; height: 221px; display: grid; place-items: center; }
 .glass-container svg { width: 100%; height: 100%; }
 .glass-container .glass-outline { stroke: var(--glass-stroke); }
 .glass-container .glass-label, .glass-container .glass-empty { fill: var(--glass-label); }
@@ -151,7 +153,7 @@ button { font: inherit; color: inherit; }
 .dv.on { display: flex; }
 .dv .off { display: none !important; }
 .d-tabs { flex: none; display: flex; gap: 3px; padding: 4px; border-radius: 999px; background: var(--surface2); }
-.d-tabs button { all: unset; cursor: pointer; padding: 7px 13px; border-radius: 999px; font-size: 13px; color: var(--text-dim); transition: background-color .15s, color .15s; }
+.d-tabs button { all: unset; cursor: pointer; white-space: nowrap; padding: 7px 10px; border-radius: 999px; font-size: 13px; color: var(--text-dim); transition: background-color .15s, color .15s; }
 .d-tabs button:hover { color: var(--text); }
 .d-tabs button[aria-selected="true"] { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
 .d-tabs button .badge { display: inline-grid; place-items: center; min-width: 17px; height: 17px; padding: 0 4px; margin-left: 5px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: var(--warn-bg); color: var(--warn); }
@@ -198,6 +200,26 @@ button { font: inherit; color: inherit; }
 .benefit { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--text); }
 .d-foot { font-size: 11.5px; color: var(--text-muted); text-align: center; }
 
+/* taste: verdict line + radar of 8 sensory axes */
+.t-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.t-sum { font-family: 'Instrument Serif', serif; font-size: 21px; color: var(--accent); line-height: 1.1; }
+.t-info { all: unset; cursor: pointer; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12.5px; color: var(--text-dim); background: var(--surface2); }
+.t-info:hover, .t-info[aria-expanded="true"] { background: var(--accent-soft); color: var(--text); }
+.t-src { font-size: 11.5px; line-height: 1.45; color: var(--text-dim); background: var(--surface2); border-radius: 10px; padding: 8px 10px; }
+.t-src[hidden] { display: none; }
+.t-wrap { position: relative; flex: 1; min-height: 110px; display: grid; place-items: center; }
+.t-radar { width: 100%; height: 100%; max-height: 260px; }
+.t-radar .ring { fill: none; stroke: var(--border); }
+.t-radar .spoke { stroke: var(--border); }
+.t-radar .lab { fill: var(--text-dim); font-size: 11px; }
+.t-radar .shape { fill: var(--accent); fill-opacity: .2; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
+.t-radar .pt { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+.t-radar .hit { fill: transparent; }
+.t-tip { position: absolute; pointer-events: none; transform: translate(-50%, -130%); padding: 4px 9px; border-radius: 8px; font-size: 12px; white-space: nowrap;
+  background: var(--float); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--border); box-shadow: var(--float-shadow); }
+.t-tip[hidden] { display: none; }
+#tasteView.on { height: 100%; }
+
 /* ---------- right pane: ingredient picker ---------- */
 .picker { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px; }
 .pills { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -225,7 +247,7 @@ button { font: inherit; color: inherit; }
 
 /* short laptop screens: a smaller glass */
 @media (min-width: 900px) and (max-height: 760px) {
-  .glass-container { width: 120px; height: 160px; }
+  .glass-container { width: 128px; height: 166px; }
   .drinkside { gap: 6px; }
   .mrow { min-height: 30px; }
   .macros { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
@@ -244,12 +266,18 @@ button { font: inherit; color: inherit; }
     column-gap: 10px; row-gap: 6px; padding: 10px 12px 12px; align-items: start; }
   .types { grid-area: types; justify-self: start; }
   .verdict { grid-area: verdict; text-align: left; height: auto; }
-  .glass-container { grid-area: glass; align-self: center; width: var(--glasscol, 120px); height: calc(var(--glasscol, 120px) * 1.33); }
+  .glass-container { grid-area: glass; align-self: center; width: var(--glasscol, 120px); height: calc(var(--glasscol, 120px) * 1.3); }
   .d-views { grid-area: views; height: min(210px, 28vh); }
   .d-tabs { grid-area: tabs; justify-self: stretch; }
-  .d-tabs button { flex: 1; text-align: center; padding: 6px 2px; font-size: 12px; }
-  .clear-btn { top: 8px; right: 8px; }
-  .types { margin-right: 36px; }
+  .d-tabs button { flex: 1; text-align: center; padding: 6px 1px; font-size: 11.5px; }
+  .t-sum { font-size: 18px; }
+  .mrow { grid-template-columns: 20px minmax(0, 1fr) 22px; grid-template-areas: "em nm x" "em qty x"; gap: 1px 6px; padding: 4px 6px; }
+  .mrow .em { grid-area: em; } .mrow .nm { grid-area: nm; } .mrow .qty { grid-area: qty; justify-self: start; } .mrow .x { grid-area: x; }
+  .mrow .em { font-size: 15px; } .mrow .nm { font-size: 12.5px; }
+  .qty button, .mrow .x { width: 22px; height: 22px; font-size: 13px; }
+  .qty .v { min-width: 30px; } .qty .vs { display: none; }
+  .d-tabs button .badge { min-width: 15px; height: 15px; margin-left: 3px; font-size: 9.5px; }
+  .t-radar .lab { font-size: 15px; }
   .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 54px; gap: 7px; }
   .tile { grid-template-columns: 24px minmax(0, 1fr) 28px; gap: 8px; padding: 0 8px; }
   .tile .em { font-size: 18px; } .tile .nm { font-size: 13px; } .tile .meta { display: none; }
@@ -265,6 +293,9 @@ button { font: inherit; color: inherit; }
   .cta { padding: 10px 13px; font-size: 13px; }
   .logo { font-size: 24px; }
   .types button { padding: 4px 8px; font-size: 11.5px; }
+}
+@media (max-width: 380px) {
+  .types button { padding: 4px 6px; font-size: 11px; }
 }
 </style>
 </head>
@@ -286,7 +317,6 @@ button { font: inherit; color: inherit; }
   <!-- your drink: the answer -->
   <section class="card drinkside" id="drinkside">
     <div class="types" id="types" role="tablist" aria-label="Drink type"></div>
-    <button class="iconbtn clear-btn" id="clearBtn" type="button" aria-label="Empty the glass" title="Empty the glass"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
     <div class="verdict idle" id="verdict" aria-live="polite"></div>
     <div class="glass-container" id="glassContainer"></div>
     <div class="d-views" id="dviews">
@@ -294,12 +324,14 @@ button { font: inherit; color: inherit; }
       <div class="dv" data-dv="nutri" id="nutriView"></div>
       <div class="dv" data-dv="comp" id="compView"></div>
       <div class="dv" data-dv="health" id="healthView"></div>
+      <div class="dv" data-dv="taste" id="tasteView"></div>
     </div>
     <div class="d-tabs" id="dtabs" role="tablist" aria-label="Drink details">
       <button role="tab" data-dv="mix" aria-selected="true">Mix</button>
       <button role="tab" data-dv="nutri" aria-selected="false">Nutrition</button>
       <button role="tab" data-dv="comp" aria-selected="false">Compounds</button>
       <button role="tab" data-dv="health" aria-selected="false">Health</button>
+      <button role="tab" data-dv="taste" aria-selected="false">Taste</button>
     </div>
   </section>
 
@@ -693,7 +725,7 @@ function renderVerdict() {
   if (!mix.length) { v.className = 'verdict idle'; v.innerHTML = `<span class="nm">Empty glass</span>`; return; }
   const a = analyze(), g = Math.round(mix.reduce((s, m) => s + getIng(m.id).g * m.qty, 0));
   v.className = 'verdict';
-  v.innerHTML = `<span class="lbl">Your ${currentDrinkType.toLowerCase()}</span><span class="nm">${Math.round(a.totals.macros.cal)} kcal · ${g} g</span>`;
+  v.innerHTML = `<span class="lbl">Your ${currentDrinkType.toLowerCase()}<button class="clear-btn" id="clearBtn" type="button" aria-label="Empty the glass" title="Empty the glass"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button></span><span class="nm">${Math.round(a.totals.macros.cal)} kcal · ${g} g</span>`;
 }
 
 function renderDrinkViews() {
@@ -701,6 +733,7 @@ function renderDrinkViews() {
   if (!mix.length) {
     $('mixList').innerHTML = empty('Add ingredients from the picker');
     ['nutriView', 'compView', 'healthView'].forEach(id => $(id).innerHTML = empty('Add ingredients to see the analysis'));
+    renderTaste();
     $('dtabs').querySelector('[data-dv="health"]').innerHTML = 'Health';
     return fitDrinkView();
   }
@@ -708,7 +741,7 @@ function renderDrinkViews() {
   // Mix
   $('mixList').innerHTML = mix.map(m => { const i = getIng(m.id);
     return `<div class="mrow"><span class="em">${i.emoji}</span><span class="nm">${i.name}</span>
-      <span class="qty"><button data-q="${m.id}" data-d="-0.25" aria-label="Less ${i.name}">−</button><span class="v">${m.qty}× ${i.serving.split('(')[0].trim()}</span><button data-q="${m.id}" data-d="0.25" aria-label="More ${i.name}">+</button></span>
+      <span class="qty"><button data-q="${m.id}" data-d="-0.25" aria-label="Less ${i.name}">−</button><span class="v" title="${m.qty}× ${i.serving}">${m.qty}×<span class="vs"> ${i.serving.split('(')[0].trim()}</span></span><button data-q="${m.id}" data-d="0.25" aria-label="More ${i.name}">+</button></span>
       <button class="x" data-rm="${m.id}" aria-label="Remove ${i.name}">✕</button></div>`; }).join('');
   // Nutrition: six macro tiles, then micronutrients by % of daily value
   const mac = (v, u, n, hi) => `<div class="macro${hi ? ' hi' : ''}"><b>${v}<span class="mono" style="font-size:11px"> ${u}</span></b><span>${n}</span></div>`;
@@ -737,6 +770,7 @@ function renderDrinkViews() {
     ${a.allBenefits.size ? `<div class="benefits">${[...a.allBenefits].map(b => `<span class="benefit">${b}</span>`).join('')}</div>` : ''}
     <div class="d-foot">Estimates · not medical advice</div>`;
   $('dtabs').querySelector('[data-dv="health"]').innerHTML = `Health${cautions ? `<span class="badge">${cautions}</span>` : ''}`;
+  renderTaste();
   fitDrinkView();
 }
 $('mixList').onclick = e => {
@@ -777,7 +811,7 @@ function setDrinkView(v) {
   fitDrinkView();
 }
 $('dtabs').onclick = e => { const b = e.target.closest('[data-dv]'); if (b) setDrinkView(b.dataset.dv); };
-$('clearBtn').onclick = () => { mix = []; ui.lp = {}; update(); };
+$('verdict').onclick = e => { if (e.target.closest('#clearBtn')) { mix = []; ui.lp = {}; update(); } };
 
 // narrow screens: the glass takes ~34% of the card's width
 const narrowMQ = matchMedia('(max-width: 899px)');
@@ -800,121 +834,77 @@ document.addEventListener('keydown', e => {
 });
 
 // ====================== GLASS VISUALIZATION ======================
+/* Containers drawn per drink type: clear glasses (tumbler, highball, soda-fountain, glass mug) and a ceramic bowl.
+   Each has wall thickness, a 3D rim, a curved liquid surface, cylinder shading, a thick base and a soft shadow. */
+const CONTAINERS = {
+  'Smoothie':    { kind: 'glass', top: 34, bot: 232, cap: 500, straw: true,  half: y => 62 - 12 * (y - 34) / 198 },
+  'Juice':       { kind: 'glass', top: 30, bot: 232, cap: 400, straw: false, half: y => 46 - 3 * (y - 30) / 202 },
+  'Shake':       { kind: 'glass', top: 30, bot: 186, cap: 500, straw: true,  stem: true, half: y => 15 + 49 * Math.pow(1 - (y - 30) / 156, 1.5) },
+  'Coffee':      { kind: 'glass', top: 70, bot: 232, cap: 350, straw: false, handle: true, half: () => 52 },
+  'Yogurt Bowl': { kind: 'bowl',  top: 128, bot: 226, cap: 400, half: y => 84 - 56 * Math.pow((y - 128) / 98, 2) },
+};
 function renderGlass() {
-  const container = document.getElementById('glassContainer');
-  if(mix.length === 0) {
-    container.innerHTML = `<svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="glassShine" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="rgba(255,255,255,0.08)"/>
-          <stop offset="40%" stop-color="rgba(255,255,255,0.02)"/>
-          <stop offset="100%" stop-color="rgba(255,255,255,0.06)"/>
-        </linearGradient>
-      </defs>
-      <path class="glass-outline" d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"
-        fill="url(#glassShine)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-      <text x="100" y="180" text-anchor="middle" fill="rgba(255,255,255,0.1)" font-size="40" opacity="0.35">🥤</text>
-    </svg>`;
-    return;
+  const C = CONTAINERS[currentDrinkType] || CONTAINERS.Smoothie, cx = 100, wall = 4, ry = h => h * 0.16;
+  const items = mix.map(m => ({ ing: getIng(m.id), q: m.qty })), totalG = items.reduce((s, x) => s + x.ing.g * x.q, 0);
+  let col = { r: 0, g: 0, b: 0 };
+  items.forEach(x => { const c = hexToRgb(x.ing.color), w = x.ing.g * x.q / (totalG || 1); col.r += c.r * w; col.g += c.g * w; col.b += c.b * w; });
+  const rgb = (k, a = 1) => `rgba(${Math.min(255, Math.round(col.r * k))},${Math.min(255, Math.round(col.g * k))},${Math.min(255, Math.round(col.b * k))},${a})`;
+  const fill = totalG ? Math.max(.08, Math.min(.92, totalG / C.cap)) : 0;
+  const innerTop = C.top + 6, innerBot = C.bot - (C.kind === 'bowl' ? 6 : 12);
+  const yFill = innerBot - fill * (innerBot - innerTop);
+  // outline helpers: sample the profile down each side
+  const side = (h, inset, y0, y1, sgn) => { const pts = []; for (let i = 0; i <= 24; i++) { const y = y0 + (y1 - y0) * i / 24; pts.push([cx + sgn * (C.half(y) - inset), y]); } return pts; };
+  const pathFor = (inset, y0, y1) => {
+    const L = side(0, inset, y0, y1, -1), R = side(0, inset, y0, y1, 1).reverse(), hb = C.half(y1) - inset;
+    return `M${L.map(p => p.map(n => n.toFixed(1)).join(',')).join(' L')} Q${cx - hb},${(y1 + ry(hb)).toFixed(1)} ${cx},${(y1 + ry(hb)).toFixed(1)} Q${cx + hb},${(y1 + ry(hb)).toFixed(1)} ${R.map(p => p.map(n => n.toFixed(1)).join(',')).join(' L')} Z`;
+  };
+  const hTop = C.half(C.top), hF = C.half(yFill) - wall;
+  let s = `<defs>
+    <linearGradient id="gWall" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".18" stop-color="#fff" stop-opacity=".05"/><stop offset=".8" stop-color="#fff" stop-opacity=".03"/><stop offset="1" stop-color="#fff" stop-opacity=".22"/></linearGradient>
+    <linearGradient id="gLiq" x1="0" x2="1"><stop offset="0" stop-color="${rgb(.62)}"/><stop offset=".32" stop-color="${rgb(1.08)}"/><stop offset=".7" stop-color="${rgb(.95)}"/><stop offset="1" stop-color="${rgb(.58)}"/></linearGradient>
+    <linearGradient id="gLiqV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>
+    <linearGradient id="gCer" x1="0" x2="1"><stop offset="0" stop-color="var(--bowl-a)"/><stop offset=".4" stop-color="var(--bowl-b)"/><stop offset="1" stop-color="var(--bowl-c)"/></linearGradient>
+    <clipPath id="cIn"><path d="${pathFor(wall, innerTop - 40, innerBot)}"/></clipPath>
+  </defs>`;
+  // shadow
+  s += `<ellipse cx="${cx}" cy="${C.stem ? 236 : C.bot + 8}" rx="${(C.stem ? 40 : C.half(C.bot) + 10).toFixed(1)}" ry="6" fill="#000" opacity=".16"/>`;
+  if (C.kind === 'bowl') {
+    // ceramic bowl: outer body, foot ring, liquid (yogurt) surface with toppings, rim
+    s += `<path d="${pathFor(0, C.top, C.bot)}" fill="url(#gCer)" stroke="var(--glass-stroke)" stroke-width="1"/>`;
+    s += `<ellipse cx="${cx}" cy="${C.bot + 2}" rx="30" ry="5" fill="var(--bowl-c)" stroke="var(--glass-stroke)" stroke-width=".8"/>`;
+    s += `<ellipse cx="${cx}" cy="${C.top}" rx="${hTop}" ry="${ry(hTop)}" fill="var(--bowl-in)" stroke="var(--glass-stroke)" stroke-width="1"/>`;
+    if (totalG) {
+      const yS = C.top + (1 - fill) * 30, hs = C.half(yS) - 7;
+      s += `<ellipse cx="${cx}" cy="${yS.toFixed(1)}" rx="${hs.toFixed(1)}" ry="${ry(hs).toFixed(1)}" fill="${rgb(1.05)}"/>`;
+      s += `<ellipse cx="${cx - hs * .25}" cy="${(yS - ry(hs) * .3).toFixed(1)}" rx="${(hs * .5).toFixed(1)}" ry="${(ry(hs) * .45).toFixed(1)}" fill="#fff" opacity=".18"/>`;
+      // toppings: a few pieces in each ingredient's colour, placed deterministically on the surface
+      let k = 0; items.forEach(x => { for (let j = 0; j < Math.min(6, Math.ceil(x.q * 3)); j++, k++) {
+        const a = k * 2.399, rr = Math.sqrt((k % 13 + .5) / 13) * .82;
+        s += `<circle cx="${(cx + Math.cos(a) * hs * rr).toFixed(1)}" cy="${(yS + Math.sin(a) * ry(hs) * rr).toFixed(1)}" r="${(2.2 + (k % 3)).toFixed(1)}" fill="${x.ing.color}" stroke="rgba(0,0,0,.15)" stroke-width=".5"/>`; } });
+    }
+    s += `<path d="M${cx - hTop},${C.top} A${hTop},${ry(hTop)} 0 0 0 ${cx + hTop},${C.top}" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/>`;
+  } else {
+    // clear glass: back wall, liquid, front wall, rim, base, highlights
+    if (C.stem) s += `<path d="M${cx - 6},${C.bot} L${cx - 4},226 L${cx + 4},226 L${cx + 6},${C.bot} Z" fill="var(--glass-fill)" stroke="var(--glass-stroke)" stroke-width="1"/><ellipse cx="${cx}" cy="229" rx="34" ry="6" fill="var(--glass-fill)" stroke="var(--glass-stroke)" stroke-width="1"/>`;
+    if (C.handle) s += `<path d="M${cx + 52},${C.top + 34} C${cx + 86},${C.top + 34} ${cx + 86},${C.bot - 42} ${cx + 52},${C.bot - 42}" fill="none" stroke="var(--glass-stroke)" stroke-width="9" stroke-linecap="round" opacity=".55"/><path d="M${cx + 52},${C.top + 34} C${cx + 86},${C.top + 34} ${cx + 86},${C.bot - 42} ${cx + 52},${C.bot - 42}" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/>`;
+    s += `<path d="${pathFor(0, C.top, C.bot)}" fill="var(--glass-fill)"/>`;
+    if (totalG) {
+      s += `<g clip-path="url(#cIn)"><rect x="0" y="${yFill.toFixed(1)}" width="200" height="260" fill="url(#gLiq)"/><rect x="0" y="${yFill.toFixed(1)}" width="200" height="260" fill="url(#gLiqV)"/>`;
+      let k = 0; items.forEach(x => { for (let j = 0; j < Math.min(5, Math.ceil(x.q * 2)); j++, k++) {   // suspended bits (seeds, fruit)
+        const px = cx + (((k * 37) % 100) / 100 - .5) * 2 * (hF - 6), py = yFill + 10 + ((k * 53) % 100) / 100 * Math.max(4, innerBot - yFill - 16);
+        s += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${(1.4 + (k % 3) * .7).toFixed(1)}" fill="${x.ing.color}" opacity=".55"/>`; } });
+      s += `</g><ellipse cx="${cx}" cy="${yFill.toFixed(1)}" rx="${hF.toFixed(1)}" ry="${ry(hF).toFixed(1)}" fill="${rgb(1.18)}"/><ellipse cx="${(cx - hF * .2).toFixed(1)}" cy="${(yFill - ry(hF) * .2).toFixed(1)}" rx="${(hF * .55).toFixed(1)}" ry="${(ry(hF) * .4).toFixed(1)}" fill="#fff" opacity=".22"/>`;
+    }
+    if (C.straw) { const sx = cx + hTop * .28;
+      s += `<g clip-path="url(#cIn)"><line x1="${sx + 22}" y1="${C.top - 26}" x2="${sx - 6}" y2="${innerBot - 6}" stroke="var(--straw)" stroke-width="7" stroke-linecap="round" opacity=".45"/></g>`;
+      s += `<line x1="${sx + 22}" y1="${C.top - 30}" x2="${sx + 13}" y2="${C.top + 2}" stroke="var(--straw)" stroke-width="7" stroke-linecap="round"/>`; }
+    s += `<path d="${pathFor(0, C.top, C.bot)}" fill="url(#gWall)" stroke="var(--glass-stroke)" stroke-width="1.4"/>`;
+    s += `<path d="M${cx - C.half(C.bot) + wall},${C.bot - 10} Q${cx},${C.bot - 4} ${cx + C.half(C.bot) - wall},${C.bot - 10}" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>`;   // thick base
+    s += `<path d="M${cx - hTop + 9},${C.top + 14} L${cx - C.half(C.bot - 30) + 9},${C.bot - 30}" stroke="#fff" stroke-opacity=".45" stroke-width="4" stroke-linecap="round"/>`;   // highlight streak
+    s += `<ellipse cx="${cx}" cy="${C.top}" rx="${hTop}" ry="${ry(hTop).toFixed(1)}" fill="none" stroke="var(--glass-stroke)" stroke-width="1.4"/><path d="M${cx - hTop},${C.top} A${hTop},${ry(hTop).toFixed(1)} 0 0 0 ${cx + hTop},${C.top}" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.6"/>`;
   }
-
-  // Calculate blended color
-  let totalG = 0;
-  mix.forEach(m => { const ing = getIng(m.id); totalG += ing.g * m.qty; });
-
-  let r=0, g=0, b=0;
-  mix.forEach(m => {
-    const ing = getIng(m.id);
-    const weight = (ing.g * m.qty) / totalG;
-    const c = hexToRgb(ing.color);
-    r += c.r * weight;
-    g += c.g * weight;
-    b += c.b * weight;
-  });
-  const blendedColor = `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
-  const lighterColor = `rgb(${Math.min(255,Math.round(r*1.3))},${Math.min(255,Math.round(g*1.3))},${Math.min(255,Math.round(b*1.3))})`;
-  const darkerColor = `rgb(${Math.round(r*0.6)},${Math.round(g*0.6)},${Math.round(b*0.6)})`;
-
-  // Fill level based on total grams (max around 600g)
-  const fillPct = Math.min(0.9, totalG / 600);
-  const fillTop = 280 - fillPct * 240;
-
-  // Calculate glass width at fill top
-  const leftAtTop = 45 + (35 - 45) * ((fillTop - 40) / (280 - 40)); // actually let me recalc
-  const lTop = 45 + (35-45) * (280-40 - (280-fillTop)) / (280-40);
-  const rTop = 155 + (165-155) * (280-40 - (280-fillTop)) / (280-40);
-  const lT = 45 - (45-35) * ((fillTop-40)/(280-40));
-  const rT = 155 + (165-155) * ((fillTop-40)/(280-40));
-
-  // Build layers for visual interest
-  const layers = mix.map(m => {
-    const ing = getIng(m.id);
-    return { color: ing.color, weight: (ing.g * m.qty) / totalG, name: ing.name };
-  });
-
-  container.innerHTML = `<svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="drinkGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${lighterColor}"/>
-        <stop offset="60%" stop-color="${blendedColor}"/>
-        <stop offset="100%" stop-color="${darkerColor}"/>
-      </linearGradient>
-      <linearGradient id="glassShine2" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="rgba(255,255,255,0.1)"/>
-        <stop offset="30%" stop-color="rgba(255,255,255,0.02)"/>
-        <stop offset="100%" stop-color="rgba(255,255,255,0.07)"/>
-      </linearGradient>
-      <filter id="glow"><feGaussianBlur stdDeviation="4" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <clipPath id="glassClip">
-        <path d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"/>
-      </clipPath>
-    </defs>
-
-    <!-- Liquid -->
-    <g clip-path="url(#glassClip)">
-      <rect x="20" y="${fillTop}" width="170" height="${300-fillTop}" fill="url(#drinkGrad)"/>
-      <!-- Texture dots -->
-      ${mix.map((m,i) => {
-        const ing = getIng(m.id);
-        let dots = '';
-        const count = Math.min(8, Math.ceil(m.qty * 3));
-        for(let d=0; d<count; d++) {
-          const cx = 55 + Math.random()*90;
-          const cy = fillTop + 10 + Math.random()*(280-fillTop-20);
-          const cr = 2 + Math.random()*4;
-          dots += `<circle cx="${cx}" cy="${cy}" r="${cr}" fill="${ing.color}" opacity="0.35"/>`;
-        }
-        return dots;
-      }).join('')}
-      <!-- Surface foam/froth line -->
-      <ellipse cx="100" cy="${fillTop}" rx="60" ry="6" fill="${lighterColor}" opacity="0.5"/>
-      <!-- Bubbles -->
-      ${[...Array(6)].map((_,i) => {
-        const cx = 60+Math.random()*80;
-        const cy = fillTop+20+Math.random()*(250-fillTop);
-        return `<circle cx="${cx}" cy="${cy}" r="${1+Math.random()*2}" fill="rgba(255,255,255,0.15)">
-          <animate attributeName="cy" from="${cy}" to="${fillTop}" dur="${2+Math.random()*3}s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" from="0.15" to="0" dur="${2+Math.random()*3}s" repeatCount="indefinite"/>
-        </circle>`;
-      }).join('')}
-    </g>
-
-    <!-- Glass outline -->
-    <path class="glass-outline" d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"
-      fill="url(#glassShine2)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
-
-    <!-- Straw -->
-    <rect class="glass-straw" x="118" y="10" width="6" height="${Math.max(fillTop,60)+20}" rx="3"
-      fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
-
-    <!-- Volume label -->
-    <text class="glass-label" x="100" y="${Math.max(30, fillTop-12)}" text-anchor="middle"
-      font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(255,255,255,0.5)">
-      ${Math.round(totalG)}${totalG > 200 ? 'ml' : 'g'}
-    </text>
-  </svg>`;
+  if (totalG) s += `<text class="glass-label" x="${cx}" y="252" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11">${Math.round(totalG)} g · ${Math.round(fill * 100)}% full</text>`;
+  $('glassContainer').innerHTML = `<svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${currentDrinkType} container${totalG ? `, ${Math.round(fill * 100)}% full` : ', empty'}">${s}</svg>`;
 }
 
 function hexToRgb(hex) {
@@ -922,6 +912,89 @@ function hexToRgb(hex) {
   const g = parseInt(hex.slice(3,5),16);
   const b = parseInt(hex.slice(5,7),16);
   return {r,g,b};
+}
+
+// ====================== TASTE ======================
+// Eight sensory dimensions: the five basic tastes (Chandrashekar et al. 2006, Nature 444:288) plus three standard
+// mouthfeel / chemesthesis attributes used by beverage sensory panels. Scores (0–5) are estimates of what one serving
+// adds to a ~300 g drink.
+const TASTE_AXES = [
+  ['sweet', 'Sweet'], ['sour', 'Sour'], ['salty', 'Salty'], ['bitter', 'Bitter'],
+  ['umami', 'Umami'], ['pungent', 'Pungent'], ['astringent', 'Astringent'], ['body', 'Body'],
+];
+//                  sweet sour salty bitter umami pungent astringent body
+const TASTE = {
+  avocado:       [0.5, 0,   0,   0.3, 0.3, 0,   0,   3.5],
+  blueberry:     [2,   1.5, 0,   0.3, 0,   0,   1,   0.8],
+  banana:        [3,   0.2, 0,   0,   0,   0,   0.3, 2.5],
+  mango:         [2.5, 0.6, 0,   0,   0,   0,   0,   1.5],
+  strawberry:    [2,   1.8, 0,   0,   0,   0,   0.6, 0.8],
+  pineapple:     [2,   2.2, 0,   0,   0,   0,   0.3, 0.5],
+  almond_milk:   [0.3, 0,   0.4, 0.2, 0,   0,   0,   1],
+  oat_milk:      [1.5, 0,   0.3, 0,   0,   0,   0,   1.8],
+  greek_yogurt:  [0.5, 2.5, 0.3, 0,   0.5, 0,   0.3, 3.5],
+  coconut_milk:  [1,   0,   0.2, 0,   0,   0,   0,   3],
+  turmeric:      [0,   0,   0,   1.5, 0,   0.8, 0.8, 0],
+  black_pepper:  [0,   0,   0,   0.3, 0,   2,   0,   0],
+  ginger:        [0.2, 0,   0,   0.3, 0,   2.5, 0,   0],
+  cinnamon:      [0.8, 0,   0,   0.3, 0,   1,   0.6, 0],
+  matcha:        [0,   0,   0,   2.5, 1.2, 0,   2.5, 0.2],
+  spirulina:     [0,   0,   0.4, 1.5, 2,   0,   0.3, 0.2],
+  honey:         [3,   0.3, 0,   0,   0,   0,   0,   0.5],
+  maple_syrup:   [3,   0,   0,   0,   0,   0,   0,   0.3],
+  chia:          [0,   0,   0,   0,   0,   0,   0,   2.5],
+  flaxseed:      [0,   0,   0,   0.5, 0,   0,   0,   1],
+  peanut_butter: [0.8, 0,   1.2, 0.3, 1,   0,   0.3, 2.5],
+  whey_protein:  [1.5, 0,   0.3, 0.3, 0.5, 0,   0.5, 1.5],
+  collagen:      [0,   0,   0,   0,   0.5, 0,   0,   0.3],
+  espresso:      [0.2, 1.2, 0,   3.5, 0.3, 0,   1.2, 0.8],
+  green_tea:     [0,   0,   0,   1.5, 0.8, 0,   1.8, 0],
+  coconut_water: [1.2, 0.2, 0.6, 0,   0,   0,   0,   0],
+};
+const CREAMY = ['avocado', 'almond_milk', 'oat_milk', 'greek_yogurt', 'coconut_milk', 'peanut_butter', 'whey_protein'];
+function tasteProfile() {
+  if (!mix.length) return null;
+  const v = TASTE_AXES.map(() => 0);
+  let grams = 0, creamyG = 0;
+  mix.forEach(m => { const s = TASTE[m.id], g = getIng(m.id).g * m.qty; grams += g;
+    if (CREAMY.includes(m.id)) creamyG += g;
+    if (s) s.forEach((x, i) => v[i] += x * m.qty); });
+  const dilute = Math.min(1.5, 300 / Math.max(200, grams));       // a bigger glass tastes milder
+  for (let i = 0; i < v.length; i++) v[i] *= dilute;
+  const [SW, SO, SA, BI, , PU, AS] = [0, 1, 2, 3, 4, 5, 6], c = grams ? creamyG / grams : 0;
+  const sweet = Math.min(5, v[SW]), salty = Math.min(5, v[SA]);
+  v[BI] *= (1 - 0.08 * sweet) * (1 - 0.1 * salty);   // sweetness and salt mask bitterness (Keast & Breslin 2003; Breslin & Beauchamp 1997)
+  v[SO] *= 1 - 0.06 * sweet;                          // sweetness masks sourness (Keast & Breslin 2003)
+  v[AS] *= 1 - 0.4 * c;                               // milk proteins and fat bind polyphenols (Lesschaeve & Noble 2005)
+  v[PU] *= 1 - 0.3 * c;                               // dairy and fat soften the burn (Nasrawi & Pangborn 1990)
+  return v.map(x => Math.round(Math.min(5, Math.max(0, x)) * 10) / 10);
+}
+function renderTaste() {
+  const el = $('tasteView'), v = tasteProfile();
+  if (!v) { el.innerHTML = '<div class="d-empty">Add ingredients to see the taste profile</div>'; return; }
+  const words = { sweet: 'sweet', sour: 'tangy', salty: 'salty', bitter: 'bitter', umami: 'savoury', pungent: 'spicy', astringent: 'dry', body: 'full-bodied' };
+  const top = TASTE_AXES.map(([k], i) => [words[k], v[i]]).filter(x => x[1] >= 1).sort((a, b) => b[1] - a[1]).slice(0, 2).map(x => x[0]);
+  const sum = top.length ? top.join(' & ').replace(/^./, c => c.toUpperCase()) : 'Light & mild';
+  const N = TASTE_AXES.length, cx = 170, cy = 118, R = 78;
+  const pt = (i, val) => { const a = -Math.PI / 2 + i * 2 * Math.PI / N; return [cx + Math.cos(a) * R * val / 5, cy + Math.sin(a) * R * val / 5]; };
+  const poly = vals => vals.map((x, i) => pt(i, x).map(n => n.toFixed(1)).join(',')).join(' ');
+  let s = '';
+  for (let k = 1; k <= 5; k++) s += `<polygon class="ring" points="${poly(Array(N).fill(k))}"/>`;
+  TASTE_AXES.forEach(([, name], i) => { const [x, y] = pt(i, 5), [lx, ly] = pt(i, 6.1);
+    s += `<line class="spoke" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/><text class="lab" x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" text-anchor="${Math.abs(lx - cx) < 4 ? 'middle' : lx > cx ? 'start' : 'end'}">${name}</text>`; });
+  s += `<polygon class="shape" points="${poly(v)}"/>`;
+  v.forEach((x, i) => { const [px, py] = pt(i, x); s += `<circle class="pt" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3"/><circle class="hit" data-a="${i}" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="11"><title>${TASTE_AXES[i][1]} ${x.toFixed(1)} / 5</title></circle>`; });
+  const open = ui.tasteSrc ? '' : ' hidden';
+  el.innerHTML = `<div class="t-head"><div class="t-sum">${sum}</div><button class="t-info" id="tInfo" aria-expanded="${!!ui.tasteSrc}" aria-label="How the taste profile is worked out">i</button></div>
+    <div class="t-src"${open}>Five basic tastes (Chandrashekar et al. 2006) plus pungency, astringency and body, scored 0–5 per serving (estimates) and diluted by the drink's weight. Sweetness and salt mask bitterness (Keast &amp; Breslin 2003; Breslin &amp; Beauchamp 1997); milk and fat soften astringency (Lesschaeve &amp; Noble 2005) and spice burn (Nasrawi &amp; Pangborn 1990).</div>
+    <div class="t-wrap"><svg class="t-radar" id="tRadar" viewBox="0 0 340 236" role="img" aria-label="Taste profile: ${TASTE_AXES.map(([, n], i) => `${n} ${v[i]}`).join(', ')}">${s}</svg><div class="t-tip" id="tTip" hidden></div></div>`;
+  $('tInfo').onclick = () => { ui.tasteSrc = !ui.tasteSrc; renderTaste(); fitDrinkView(); };
+  const radar = $('tRadar'), tip = $('tTip');
+  const show = e => { const h = e.target.closest('.hit'); if (!h) return tip.hidden = true;
+    const w = radar.parentNode.getBoundingClientRect(), i = +h.dataset.a;
+    tip.textContent = `${TASTE_AXES[i][1]} ${v[i].toFixed(1)} / 5`; tip.style.left = (e.clientX - w.left) + 'px'; tip.style.top = (e.clientY - w.top) + 'px'; tip.hidden = false; };
+  radar.addEventListener('mousemove', show); radar.addEventListener('click', show);
+  radar.addEventListener('mouseleave', () => tip.hidden = true);
 }
 
 // ====================== ANALYSIS (totals, interactions, condition checks) ======================

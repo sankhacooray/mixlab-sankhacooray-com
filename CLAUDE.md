@@ -6,13 +6,18 @@ Single-file HTML5 app (`index.html`), GitHub Pages: pushing `main` deploys. Same
 ## Layout
 - App bar: logo · ingredient search (opens over the bar on phones; `/` focuses it) · theme switch · CTA "Mix a sample drink".
 - Left pane (`#drinkside`): drink-type pills · answer ("Your smoothie · 296 kcal · 383 g") · glass (SVG, `renderGlass`) ·
-  bottom tabs **Mix | Nutrition | Compounds | Health** (`.dv` views, one at a time; Health shows a caution count badge).
+  bottom tabs **Mix | Nutrition | Compounds | Health | Taste** (`.dv` views, one at a time; Health shows a caution count badge).
+- Containers (`CONTAINERS`, `renderGlass`): tumbler + straw (Smoothie), highball (Juice), soda-fountain glass (Shake),
+  glass mug (Coffee), ceramic bowl with toppings (Yogurt Bowl); fill = grams / container capacity.
   Narrow (<900px): grid with the glass in the right column (`--glasscol`), tabs spanning the full width.
 - Right pane: category pills + ingredient tiles (emoji, kcal · serving, + to add), paged with dots; ↑/↓ or wheel turns pages.
 
 ## Data (don't change without asking)
 `INGREDIENTS` (macros, micros, compounds, benefits, warnings), `INTERACTIONS`, `DISEASE_CHECKS`, `SAMPLE_MIXES`.
 `analyze()` derives totals, interactions and condition notes; the UI only renders them.
+Taste: `TASTE_AXES` = five basic tastes + pungent, astringent, body; `TASTE` scores per serving (estimates);
+`tasteProfile()` dilutes by weight and applies masking (sweet/salt → bitter, sweet → sour, dairy/fat → astringent, pungent).
+Sources are listed in the Taste tab's ⓘ.
 
 ## No-scroll machinery
 `fitPages()` pages the tiles (`data-stretch` grows rows to fill); `fitDrinkView()` pages the current tab's `.plist`
