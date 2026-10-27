@@ -97,533 +97,222 @@
   --glass-stroke: rgba(255,255,255,0.18); --glass-fill: rgba(255,255,255,0.06); --glass-label: rgba(255,255,255,0.5);
   --page-bg: #0a0a0c; color-scheme: dark;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-/* Header */
-.header {
-  padding: 24px 32px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(166,227,111,0.03) 0%, transparent 100%);
-}
-.logo {
-  font-family: 'Instrument Serif', serif;
-  font-size: 32px;
-  color: var(--accent);
-  letter-spacing: -0.5px;
-}
-.logo span { color: var(--text-dim); font-weight: 300; }
-.tagline { color: var(--text-muted); font-size: 13px; margin-left: auto; }
-
-/* Layout */
-.app {
-  display: grid;
-  grid-template-columns: 320px 1fr 380px;
-  height: calc(100vh - 81px);
-}
-
-/* Ingredient Panel */
-.panel-left {
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.panel-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-}
-.panel-title {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  margin-bottom: 12px;
-}
-
-/* Search */
-.search-box {
-  position: relative;
-}
-.search-box input {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px 10px 36px;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 13px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.search-box input:focus { border-color: var(--accent); }
-.search-box::before {
-  content: '';
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  background-color: var(--text-muted);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21 21-4.34-4.34'/%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3C/svg%3E") center/contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21 21-4.34-4.34'/%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3C/svg%3E") center/contain no-repeat;
-}
-
-/* Categories */
-.categories {
-  display: flex;
-  gap: 6px;
-  padding: 12px 20px;
-  overflow-x: auto;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.cat-btn {
-  padding: 5px 12px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-dim);
-  font-size: 11px;
-  font-family: inherit;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-.cat-btn.active, .cat-btn:hover {
-  background: var(--accent);
-  color: var(--on-accent);
-  border-color: var(--accent);
-}
-
-/* Ingredient List */
-.ingredient-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px;
-}
-.ingredient-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.15s;
-  border: 1px solid transparent;
-}
-.ingredient-item:hover {
-  background: var(--surface2);
-  border-color: var(--border);
-}
-.ing-emoji { font-size: 22px; width: 32px; text-align: center; }
-.ing-info { flex: 1; min-width: 0; }
-.ing-name { font-size: 13px; font-weight: 500; }
-.ing-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-.ing-add {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--accent);
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-.ing-add:hover {
-  background: var(--accent);
-  color: var(--on-accent);
-  border-color: var(--accent);
-}
-
-/* Center / Glass Area */
-.panel-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: radial-gradient(ellipse at 50% 80%, rgba(166,227,111,0.04) 0%, transparent 60%);
-  overflow-y: auto;
-  padding: 32px 24px;
-}
-
-.drink-type-selector {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 28px;
-}
-.drink-type-btn {
-  padding: 8px 20px;
-  border-radius: 24px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-dim);
-  font-family: inherit;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.drink-type-btn.active {
-  background: var(--surface3);
-  color: var(--text);
-  border-color: var(--accent);
-}
-
-/* Glass Visualization */
-.glass-container {
-  position: relative;
-  width: 200px;
-  margin-bottom: 28px;
-}
-.glass-svg { width: 100%; }
-
-/* Mix Items */
-.mix-area {
-  width: 100%;
-  max-width: 500px;
-}
-.mix-title {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  margin-bottom: 12px;
-}
-.mix-items { display: flex; flex-direction: column; gap: 6px; }
-.mix-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  animation: slideIn 0.25s ease;
-}
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.mix-item .ing-emoji { font-size: 18px; width: 24px; }
-.mix-item-name { font-size: 13px; flex: 1; }
-.mix-qty {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.mix-qty button {
-  width: 24px; height: 24px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  background: var(--surface2);
-  color: var(--text-dim);
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s;
-}
-.mix-qty button:hover { border-color: var(--accent); color: var(--accent); }
-.mix-qty-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  width: 50px;
-  text-align: center;
-  color: var(--text-dim);
-}
-.mix-remove {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 16px;
-  padding: 4px;
-  transition: color 0.15s;
-}
-.mix-remove:hover { color: var(--danger); }
-
-.empty-mix {
-  text-align: center;
-  padding: 48px 24px;
-  color: var(--text-muted);
-  font-size: 13px;
-  line-height: 1.8;
-}
-.empty-mix .big { font-size: 40px; margin-bottom: 12px; }
-
-/* Right Panel - Analysis */
-.panel-right {
-  border-left: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.analysis-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-.analysis-section {
-  margin-bottom: 24px;
-}
-.section-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Macros */
-.macro-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-}
-.macro-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px;
-}
-.macro-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 20px;
-  font-weight: 500;
-  color: var(--text);
-}
-.macro-unit { font-size: 11px; color: var(--text-muted); }
-.macro-name { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-
-/* Compounds */
-.compound-list { display: flex; flex-direction: column; gap: 4px; }
-.compound-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  background: var(--surface);
-  border-radius: 6px;
-  font-size: 12px;
-}
-.compound-name { flex: 1; color: var(--text-dim); }
-.compound-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text);
-}
-.compound-bar-wrap {
-  width: 48px;
-  height: 4px;
-  background: var(--surface3);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.compound-bar {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 2px;
-  transition: width 0.4s ease;
-}
-
-/* Alerts */
-.alert-card {
-  padding: 12px 14px;
-  border-radius: var(--radius-sm);
-  margin-bottom: 6px;
-  font-size: 12px;
-  line-height: 1.5;
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-.alert-card.danger { background: var(--danger-bg); border: 1px solid var(--danger-border); }
-.alert-card.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); }
-.alert-card.good { background: var(--good-bg); border: 1px solid var(--good-border); }
-.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-.alert-card.danger .alert-icon { color: var(--danger); }
-.alert-card.warn .alert-icon { color: var(--warn); }
-.alert-card.good .alert-icon { color: var(--good); }
-.alert-text strong { display: block; margin-bottom: 2px; }
-.alert-card.danger .alert-text strong { color: var(--danger); }
-.alert-card.warn .alert-text strong { color: var(--warn); }
-.alert-card.good .alert-text strong { color: var(--good); }
-
-/* Benefit tags */
-.benefit-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.benefit-tag {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  background: var(--good-bg);
-  border: 1px solid var(--good-border);
-  color: var(--good);
-}
-
-/* Empty state */
-.analysis-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: var(--text-muted);
-  font-size: 13px;
-  text-align: center;
-  padding: 40px;
-  line-height: 1.8;
-}
-
-/* Responsive */
-@media (max-width: 1100px) {
-  .app { grid-template-columns: 280px 1fr 320px; }
-}
-@media (max-width: 860px) {
-  .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; height: auto; }
-  .panel-left, .panel-right { max-height: 50vh; }
-  .header { padding: 16px 20px; }
-  .tagline { display: none; }
-}
-
-/* ===== ui-ux-style layer ===== */
-/* rule 14: body is the scroller, no overscroll bounce, no white edge */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* rules 14, 33, 36: nothing scrolls, no bounce */
 html { height: 100%; overflow: hidden; background: var(--page-bg); overscroll-behavior: none; }
-body { height: 100%; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: none; display: flex; flex-direction: column; }
-::-webkit-scrollbar-thumb { background: var(--surface3); }
+body { height: 100%; overflow: hidden; overscroll-behavior: none; display: flex; flex-direction: column;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--bg); color: var(--text);
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+button { font: inherit; color: inherit; }
+.mono { font-family: 'JetBrains Mono', monospace; }
 
-/* rules 7, 10, 12, 19, 23: full-width app bar, no bottom border, theme switch + one CTA at the right edge */
-.header {
-  position: sticky; top: 0; z-index: 20; flex: none;
-  height: 60px; padding: 0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
-  border-bottom: 0; background: var(--bg); gap: 14px;
-}
-.logo { font-size: 28px; line-height: 1; white-space: nowrap; }
-.tagline { margin-left: 0; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* app bar: brand · search · theme · one CTA */
+.topbar { flex: none; padding-top: env(safe-area-inset-top); position: relative; z-index: 30; }
+.bar-in { display: flex; align-items: center; gap: 14px; height: 62px; padding: 0 18px; }
+.logo { font-family: 'Instrument Serif', serif; font-size: 28px; color: var(--accent); letter-spacing: -.5px; white-space: nowrap; line-height: 1; }
+.search { position: relative; flex: 1; max-width: 460px; margin: 0 auto; display: flex; align-items: center; }
+.search svg { position: absolute; left: 13px; color: var(--text-muted); pointer-events: none; }
+.search input { width: 100%; height: 40px; border: 0; border-radius: 999px; padding: 0 16px 0 38px; font: inherit; font-size: 14px; color: var(--text); background: var(--surface2); outline: none; }
+.search input:focus { box-shadow: 0 0 0 2px var(--accent); background: var(--surface); }
 .iconbtn { all: unset; cursor: pointer; flex: none; width: 36px; height: 36px; border-radius: 999px; display: grid; place-items: center; color: var(--text-dim); transition: background-color .15s, color .15s; }
 .iconbtn:hover { color: var(--text); background: var(--accent-soft); }
 .iconbtn:focus-visible, .cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .ico-sun { display: none; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ico-sun { display: block; } :root:not([data-theme="light"]) .ico-moon { display: none; } }
 :root[data-theme="dark"] .ico-sun { display: block; } :root[data-theme="dark"] .ico-moon { display: none; }
-.cta {
-  flex: none; cursor: pointer; border: 0; font-family: inherit; font-size: 14px; font-weight: 600; line-height: 1;
-  background: var(--accent); color: var(--on-accent); padding: 11px 18px; border-radius: 999px; white-space: nowrap;
-  transition: background-color .15s, box-shadow .15s;
-}
-.cta:hover { background: var(--accent-hi); box-shadow: 0 0 0 4px var(--accent-soft), 0 6px 20px -6px var(--accent); }
+.cta { flex: none; cursor: pointer; border: 0; font-size: 14px; font-weight: 600; line-height: 1; background: var(--accent); color: var(--on-accent);
+  padding: 11px 18px; border-radius: 999px; white-space: nowrap; transition: background-color .15s, box-shadow .15s; }
+.cta:hover { background: var(--accent-hi); box-shadow: 0 0 0 4px var(--accent-soft); }
 .cta .short { display: none; }
+.search-open { display: none !important; }
 
-/* rule 32: side panes float like the app bar; rule 7: no divider lines inside them */
-.app { flex: 1 1 0; min-height: 0; height: auto; gap: 12px; padding: 0 12px; }
-.panel-left, .panel-right {
-  border: 1px solid var(--border); border-radius: 14px; background: var(--float);
-  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: var(--float-shadow);
-}
-.panel-header { border-bottom: 0; padding-bottom: 8px; }
-.categories { border-bottom: 0; padding-top: 4px; padding-bottom: 8px; scrollbar-width: none; }
-.panel-center { padding: 20px 12px; overscroll-behavior: contain; }
-.ingredient-list, .analysis-scroll { overscroll-behavior: contain; }
-.drink-type-selector { flex-wrap: wrap; justify-content: center; }
+/* two panes: your drink (the answer) and the ingredient picker */
+.main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(340px, 420px) minmax(0, 1fr); gap: 14px; padding: 4px 18px 0; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; min-height: 0; position: relative; }
 
-/* rule 20: rows hover with a slight colour change, not an outline */
-.ingredient-item:hover { background: var(--card-hover); border-color: transparent; }
-
-/* glass drawing follows the theme */
+/* ---------- left pane ---------- */
+.drinkside { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 16px 14px; }
+.types { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; padding: 4px; border-radius: 999px; background: var(--surface2); }
+.types button { all: unset; cursor: pointer; padding: 5px 11px; border-radius: 999px; font-size: 12.5px; color: var(--text-dim); }
+.types button.on { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.verdict { height: 52px; flex: none; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+.verdict .lbl { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
+.verdict .nm { font-family: 'Instrument Serif', serif; font-size: 26px; line-height: 1.1; color: var(--accent); }
+.verdict.idle .nm { color: var(--text-muted); font-size: 22px; }
+.clear-btn { position: absolute; top: 60px; right: 12px; }   /* beside the answer, clear of the type pills */
+.glass-container { flex: none; width: 150px; height: 200px; display: grid; place-items: center; }
+.glass-container svg { width: 100%; height: 100%; }
 .glass-container .glass-outline { stroke: var(--glass-stroke); }
 .glass-container .glass-label, .glass-container .glass-empty { fill: var(--glass-label); }
 .glass-container .glass-straw { fill: var(--glass-fill); stroke: var(--glass-stroke); }
 
-/* rule 18: footer is one short line */
-.footer { flex: none; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 14px; padding: 10px 12px 12px; font-size: 12.5px; color: var(--text-muted); }
-.footer a { color: var(--text-dim); text-decoration: none; }
-.footer a:hover { color: var(--accent); }
+.d-views { flex: 1; min-height: 0; width: 100%; overflow: hidden; display: flex; flex-direction: column; }
+.dv { display: none; width: 100%; flex-direction: column; gap: 6px; }
+.dv.on { display: flex; }
+.dv .off { display: none !important; }
+.d-tabs { flex: none; display: flex; gap: 3px; padding: 4px; border-radius: 999px; background: var(--surface2); }
+.d-tabs button { all: unset; cursor: pointer; padding: 7px 13px; border-radius: 999px; font-size: 13px; color: var(--text-dim); transition: background-color .15s, color .15s; }
+.d-tabs button:hover { color: var(--text); }
+.d-tabs button[aria-selected="true"] { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.d-tabs button .badge { display: inline-grid; place-items: center; min-width: 17px; height: 17px; padding: 0 4px; margin-left: 5px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: var(--warn-bg); color: var(--warn); }
+.d-empty { color: var(--text-muted); font-size: 13.5px; text-align: center; padding-top: 10px; }
+.lpager { display: flex; justify-content: center; gap: 7px; min-height: 9px; margin-top: 2px; }
+.lpager button { all: unset; cursor: pointer; width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+.lpager button.on { background: var(--accent); }
 
-/* rule 33: laptops fit the screen; each panel scrolls inside itself */
-@media (min-width: 861px) {
-  body { overflow-y: hidden; }
+/* mix rows */
+.mrow { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto 26px; align-items: center; gap: 8px; min-height: 34px; padding: 2px 8px; border-radius: 10px; background: var(--surface2); }
+.mrow .em { font-size: 18px; text-align: center; }
+.mrow .nm { font-size: 13.5px; font-weight: 600; line-height: 1.2; }
+.qty { display: flex; align-items: center; gap: 3px; }
+.qty button, .mrow .x { all: unset; cursor: pointer; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 15px; background: var(--surface); }
+.qty button:hover, .mrow .x:hover { background: var(--card-hover); }
+.qty .v { min-width: 48px; text-align: center; font-size: 12px; color: var(--text-dim); line-height: 1.15; }
+.mrow .x { background: transparent; color: var(--text-muted); font-size: 13px; }
+
+/* nutrition */
+.macros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.macro { display: flex; flex-direction: column; align-items: center; padding: 6px 2px; border-radius: 10px; background: var(--surface2); }
+.macro b { font-size: 15px; font-variant-numeric: tabular-nums; line-height: 1.2; white-space: nowrap; }
+.macro span { font-size: 11px; color: var(--text-muted); }
+.macro.hi { background: var(--warn-bg); }
+.bar-row > span:first-child { overflow-wrap: anywhere; line-height: 1.2; }
+.bar-row { display: grid; grid-template-columns: minmax(0, 1fr) auto 70px 36px; align-items: center; gap: 8px; min-height: 22px; font-size: 12.5px; }
+.bar-row .v { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-dim); text-align: right; white-space: nowrap; }
+.bar-row .pct { font-size: 11.5px; text-align: right; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.bar-row .pct.good { color: var(--good); }
+.bar { height: 6px; border-radius: 3px; background: var(--surface3); position: relative; overflow: hidden; }
+.bar i { position: absolute; inset: 0 auto 0 0; border-radius: 3px; background: var(--accent); }
+.bar-row.cmp { grid-template-columns: minmax(0, 1fr) auto 90px; }
+.sub-lbl { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-top: 2px; }
+
+/* health */
+.alert { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; padding: 6px 10px; border-radius: 10px; font-size: 12.5px; line-height: 1.35; }
+.alert svg { width: 16px; height: 16px; margin-top: 1px; }
+.alert b { display: block; font-size: 13px; }
+.alert .src { color: var(--text-muted); font-size: 11.5px; }
+.alert.good { background: var(--good-bg); } .alert.good svg { color: var(--good); }
+.alert.warn { background: var(--warn-bg); } .alert.warn svg { color: var(--warn); }
+.alert.danger { background: var(--danger-bg); } .alert.danger svg { color: var(--danger); }
+.benefits { display: flex; flex-wrap: wrap; gap: 5px; }
+.benefit { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--text); }
+.d-foot { font-size: 11.5px; color: var(--text-muted); text-align: center; }
+
+/* ---------- right pane: ingredient picker ---------- */
+.picker { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { all: unset; cursor: pointer; height: 30px; padding: 0 13px; display: inline-flex; align-items: center; border-radius: 999px; font-size: 13px; color: var(--text-dim); background: var(--surface2); white-space: nowrap; transition: background-color .15s, color .15s; }
+.pill:hover { color: var(--text); }
+.pill.on { color: var(--text); background: var(--accent-soft); font-weight: 600; }
+.tiles { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); grid-auto-rows: 64px; gap: 8px; align-content: start; overflow: hidden; }
+.tile { display: grid; grid-template-columns: 30px minmax(0, 1fr) 30px; align-items: center; gap: 10px; padding: 0 10px 0 12px; border-radius: 12px; background: var(--surface2); transition: background-color .15s; }
+.tile:hover { background: var(--card-hover); }
+.tile.in { background: var(--accent-soft); }
+.tile.off { display: none; }
+.tile .em { font-size: 22px; text-align: center; }
+.tile .nm { font-size: 14px; font-weight: 600; line-height: 1.2; }
+.tile .meta { display: block; font-size: 11.5px; color: var(--text-muted); font-weight: 400; margin-top: 1px; }
+.tile .add { all: unset; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; color: var(--accent); background: var(--surface); }
+.tile .add:hover { background: var(--accent); color: var(--on-accent); }
+.tile .n { font-size: 11px; font-weight: 700; color: var(--accent); }
+.pager { display: flex; justify-content: center; gap: 8px; min-height: 10px; }
+.pager button { all: unset; cursor: pointer; width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+.pager button.on { background: var(--accent); }
+.p-empty { grid-column: 1 / -1; color: var(--text-muted); font-size: 13.5px; padding: 8px 2px; }
+
+/* reserve the shared footer's final height so nothing jumps when its script arrives */
+#scn-footer { flex: none; min-height: 56px; }
+
+/* short laptop screens: a smaller glass */
+@media (min-width: 900px) and (max-height: 760px) {
+  .glass-container { width: 120px; height: 160px; }
+  .drinkside { gap: 6px; }
+  .mrow { min-height: 30px; }
+  .macros { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+  .macro { padding: 5px 1px; } .macro b { font-size: 13px; }
 }
-@media (max-width: 860px) {
-  .app { flex: none; }
-  .tagline { display: none; }
-  .header { height: 56px; }
-  .logo { font-size: 24px; }
-  .spacer-m { flex: 1; }
+
+/* ---------- narrow screens: drink pane on top in two columns, picker below ---------- */
+@media (max-width: 899px) {
+  .main { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 10px; padding: 0 10px; }
+  .bar-in { padding: 0 12px; gap: 8px; }
+  .search { display: none; }
+  .search-open { display: grid !important; margin-left: auto; }
+  .topbar.searching .search { display: flex; position: absolute; left: 10px; right: 10px; top: calc(11px + env(safe-area-inset-top)); max-width: none; z-index: 40; }
+  .drinkside.card { display: grid; grid-template-columns: minmax(0, 1fr) var(--glasscol, 120px);
+    grid-template-areas: "types types" "verdict glass" "views glass" "tabs tabs"; grid-template-rows: auto auto minmax(0, 1fr) auto;
+    column-gap: 10px; row-gap: 6px; padding: 10px 12px 12px; align-items: start; }
+  .types { grid-area: types; justify-self: start; }
+  .verdict { grid-area: verdict; text-align: left; height: auto; }
+  .glass-container { grid-area: glass; align-self: center; width: var(--glasscol, 120px); height: calc(var(--glasscol, 120px) * 1.33); }
+  .d-views { grid-area: views; height: min(210px, 28vh); }
+  .d-tabs { grid-area: tabs; justify-self: stretch; }
+  .d-tabs button { flex: 1; text-align: center; padding: 6px 2px; font-size: 12px; }
+  .clear-btn { top: 8px; right: 8px; }
+  .types { margin-right: 36px; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 54px; gap: 7px; }
+  .tile { grid-template-columns: 24px minmax(0, 1fr) 28px; gap: 8px; padding: 0 8px; }
+  .tile .em { font-size: 18px; } .tile .nm { font-size: 13px; } .tile .meta { display: none; }
+  .pills { gap: 5px; } .pill { height: 26px; padding: 0 10px; font-size: 12px; }
+  .bar-row { grid-template-columns: minmax(0, 1fr) auto 36px 30px; gap: 6px; font-size: 12px; }
+  .bar-row.cmp { grid-template-columns: minmax(0, 1fr) auto 44px; }
+  .types { max-width: none; }
+  .picker { gap: 8px; padding: 10px; }
 }
-@media (max-width: 420px) {
+@media (max-width: 560px) { #scn-footer { min-height: 52px; } }
+@media (max-width: 520px) {
   .cta .long { display: none; } .cta .short { display: inline; }
-  .header { gap: 8px; }
-  .logo span { display: none; }
+  .cta { padding: 10px 13px; font-size: 13px; }
+  .logo { font-size: 24px; }
+  .types button { padding: 4px 8px; font-size: 11.5px; }
 }
 </style>
 </head>
 <body>
-
-<header class="header">
-  <div class="logo">MixLab <span>v0.1</span></div>
-  <div class="tagline">Drink Innovation System — Nutrition · Compounds · Safety</div>
-  <div class="spacer-m"></div>
-  <button class="iconbtn" id="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme"><svg class="ico-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ico-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
-  <button class="cta" id="sampleBtn" type="button" onclick="mixSample()"><span class="long">Mix a sample drink</span><span class="short">Sample drink</span></button>
+<header class="topbar">
+  <div class="bar-in">
+    <div class="logo">MixLab</div>
+    <div class="search" id="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search ingredients" autocomplete="off" aria-label="Search ingredients">
+    </div>
+    <button class="iconbtn search-open" id="searchOpen" type="button" aria-label="Search" title="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+    <button class="iconbtn" id="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme"><svg class="ico-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ico-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
+    <button class="cta" id="sampleBtn" type="button"><span class="long">Mix a sample drink</span><span class="short">Sample</span></button>
+  </div>
 </header>
 
-<div class="app">
-  <!-- LEFT: Ingredient Picker -->
-  <div class="panel-left">
-    <div class="panel-header">
-      <div class="panel-title">Ingredients</div>
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search ingredients..." oninput="filterIngredients()">
-      </div>
-    </div>
-    <div class="categories" id="categories"></div>
-    <div class="ingredient-list" id="ingredientList"></div>
-  </div>
-
-  <!-- CENTER: Glass + Mix -->
-  <div class="panel-center">
-    <div class="drink-type-selector" id="drinkTypes"></div>
+<main class="main">
+  <!-- your drink: the answer -->
+  <section class="card drinkside" id="drinkside">
+    <div class="types" id="types" role="tablist" aria-label="Drink type"></div>
+    <button class="iconbtn clear-btn" id="clearBtn" type="button" aria-label="Empty the glass" title="Empty the glass"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+    <div class="verdict idle" id="verdict" aria-live="polite"></div>
     <div class="glass-container" id="glassContainer"></div>
-    <div class="mix-area">
-      <div class="mix-title">Your Mix</div>
-      <div id="mixItems"></div>
+    <div class="d-views" id="dviews">
+      <div class="dv on" data-dv="mix"><div class="plist" id="mixList"></div></div>
+      <div class="dv" data-dv="nutri" id="nutriView"></div>
+      <div class="dv" data-dv="comp" id="compView"></div>
+      <div class="dv" data-dv="health" id="healthView"></div>
     </div>
-  </div>
+    <div class="d-tabs" id="dtabs" role="tablist" aria-label="Drink details">
+      <button role="tab" data-dv="mix" aria-selected="true">Mix</button>
+      <button role="tab" data-dv="nutri" aria-selected="false">Nutrition</button>
+      <button role="tab" data-dv="comp" aria-selected="false">Compounds</button>
+      <button role="tab" data-dv="health" aria-selected="false">Health</button>
+    </div>
+  </section>
 
-  <!-- RIGHT: Analysis -->
-  <div class="panel-right">
-    <div class="analysis-scroll" id="analysisPanel"></div>
-  </div>
-</div>
+  <!-- the ingredient picker -->
+  <section class="card picker">
+    <div class="pills" id="cats"></div>
+    <div class="tiles" id="tiles" data-stretch="78"></div>
+    <div class="pager" id="pager"></div>
+  </section>
+</main>
 
-<footer class="footer">
-  <span>MixLab · a drink innovation lab · not medical advice</span>
-  <a href="https://sankhacooray.com">sankhacooray.com</a>
-  <a href="https://github.com/sankhacooray/mixlab-sankhacooray-com">Source</a>
-</footer>
+<div id="scn-footer"></div>
+<script async src="https://cdn.sankhacooray.com/js/sankha-footer.js" data-site="mixlab.sankhacooray.com" data-tagline="a drink innovation lab · not medical advice"></script>
 
 <script>
 // ====================== INGREDIENT DATABASE ======================
@@ -914,105 +603,201 @@ const DISEASE_CHECKS = [
   },
 ];
 
-// ====================== STATE ======================
+// ====================== UI ======================
+// One drink pane (type · answer · glass · Mix | Nutrition | Compounds | Health) and one picker pane.
+// Nothing scrolls: lists page instead (ui-ux-style rules 33, 36, 37).
 const DRINK_TYPES = ['Smoothie','Yogurt Bowl','Coffee','Juice','Shake'];
 let currentCategory = 'All';
 let currentDrinkType = 'Smoothie';
 let mix = []; // {id, qty} where qty is number of servings
-
-// ====================== INIT ======================
-function init() {
-  renderCategories();
-  renderIngredients();
-  renderDrinkTypes();
-  renderMix();
-  renderGlass();
-  renderAnalysis();
-}
-
-function renderCategories() {
-  const cats = ['All', ...new Set(INGREDIENTS.map(i => i.cat))];
-  document.getElementById('categories').innerHTML = cats.map(c =>
-    `<button class="cat-btn ${c === currentCategory ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`
-  ).join('');
-}
-
-function setCategory(c) {
-  currentCategory = c;
-  renderCategories();
-  renderIngredients();
-}
-
-function filterIngredients() { renderIngredients(); }
-
-function renderIngredients() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  let items = INGREDIENTS;
-  if(currentCategory !== 'All') items = items.filter(i => i.cat === currentCategory);
-  if(q) items = items.filter(i => i.name.toLowerCase().includes(q));
-
-  document.getElementById('ingredientList').innerHTML = items.map(i => `
-    <div class="ingredient-item" ondblclick="addToMix('${i.id}')">
-      <div class="ing-emoji">${i.emoji}</div>
-      <div class="ing-info">
-        <div class="ing-name">${i.name}</div>
-        <div class="ing-meta">${i.serving} · ${i.macros.cal} cal</div>
-      </div>
-      <button class="ing-add" onclick="addToMix('${i.id}')" title="Add to mix">+</button>
-    </div>
-  `).join('');
-}
-
-function renderDrinkTypes() {
-  document.getElementById('drinkTypes').innerHTML = DRINK_TYPES.map(d =>
-    `<button class="drink-type-btn ${d === currentDrinkType ? 'active' : ''}" onclick="setDrinkType('${d}')">${d}</button>`
-  ).join('');
-}
-
-function setDrinkType(d) { currentDrinkType = d; renderDrinkTypes(); renderGlass(); }
-
-// ====================== MIX MANAGEMENT ======================
-function addToMix(id) {
-  const existing = mix.find(m => m.id === id);
-  if(existing) { existing.qty += 1; }
-  else { mix.push({id, qty: 1}); }
-  renderMix(); renderGlass(); renderAnalysis();
-}
-
-function removeFromMix(id) {
-  mix = mix.filter(m => m.id !== id);
-  renderMix(); renderGlass(); renderAnalysis();
-}
-
-function adjustQty(id, delta) {
-  const item = mix.find(m => m.id === id);
-  if(!item) return;
-  item.qty = Math.max(0.25, Math.round((item.qty + delta) * 4) / 4);
-  renderMix(); renderGlass(); renderAnalysis();
-}
+const ui = { page: 0, view: 'mix', lp: {} };
+const $ = id => document.getElementById(id);
+const ICON = {
+  good: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+  warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+  danger: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>',
+};
 
 function getIng(id) { return INGREDIENTS.find(i => i.id === id); }
 
-function renderMix() {
-  const el = document.getElementById('mixItems');
-  if(mix.length === 0) {
-    el.innerHTML = `<div class="empty-mix"><div class="big"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7 6.82 21.18a2.83 2.83 0 0 1-3.99-.01a2.83 2.83 0 0 1 0-4L17 3"/><path d="m16 2 6 6"/><path d="M12 16H4"/></svg></div>Add ingredients from the left panel<br>to start creating your drink</div>`;
-    return;
-  }
-  el.innerHTML = mix.map(m => {
-    const ing = getIng(m.id);
-    return `<div class="mix-item">
-      <div class="ing-emoji">${ing.emoji}</div>
-      <div class="mix-item-name">${ing.name}</div>
-      <div class="mix-qty">
-        <button onclick="adjustQty('${m.id}',-0.25)">−</button>
-        <span class="mix-qty-val">${m.qty}× ${ing.serving.split('(')[0].trim()}</span>
-        <button onclick="adjustQty('${m.id}',0.25)">+</button>
-      </div>
-      <button class="mix-remove" onclick="removeFromMix('${m.id}')">✕</button>
-    </div>`;
-  }).join('');
+// ---------- picker ----------
+function renderCategories() {
+  const cats = ['All', ...new Set(INGREDIENTS.map(i => i.cat))];
+  $('cats').innerHTML = cats.map(c => `<button class="pill${c === currentCategory ? ' on' : ''}" data-cat="${c}">${c}</button>`).join('');
 }
+$('cats').onclick = e => { const b = e.target.closest('[data-cat]'); if (!b) return; currentCategory = b.dataset.cat; ui.page = 0; renderCategories(); renderIngredients(); };
+
+function renderIngredients() {
+  const q = $('q').value.trim().toLowerCase();
+  let items = INGREDIENTS;
+  if (currentCategory !== 'All') items = items.filter(i => i.cat === currentCategory);
+  if (q) items = items.filter(i => (i.name + ' ' + i.cat + ' ' + i.benefits.join(' ')).toLowerCase().includes(q));
+  $('tiles').innerHTML = items.length ? items.map(i => {
+    const m = mix.find(x => x.id === i.id);
+    return `<div class="tile${m ? ' in' : ''}" title="${i.name} · ${i.serving}"><span class="em">${i.emoji}</span>
+      <span class="nm">${i.name}<span class="meta">${i.macros.cal} kcal · ${i.serving.split('(')[0].trim()}${m ? ` · <span class="n">×${m.qty}</span>` : ''}</span></span>
+      <button class="add" data-add="${i.id}" aria-label="Add ${i.name}">+</button></div>`;
+  }).join('') : `<div class="p-empty">No ingredients match “${q.replace(/</g, '&lt;')}”</div>`;
+  paginate();
+}
+$('tiles').onclick = e => { const b = e.target.closest('[data-add]'); if (b) addToMix(b.dataset.add); };
+$('q').addEventListener('input', () => { ui.page = 0; renderIngredients(); });
+
+/* split a grid's items into pages that fit its box; data-stretch grows rows to fill */
+function fitPages(root, pager, key) {
+  const items = [...root.children].filter(x => x.classList.contains('tile'));
+  items.forEach(t => t.classList.remove('off'));
+  pager.innerHTML = '';
+  if (root.dataset.stretch) root.style.gridAutoRows = '';
+  if (!items.length || !root.offsetParent) return;
+  const cs = getComputedStyle(root), cols = cs.gridTemplateColumns.split(' ').length;
+  const rowH = items[0].getBoundingClientRect().height, gap = parseFloat(cs.rowGap) || 0;
+  const rows = Math.max(1, Math.floor((root.clientHeight + gap) / (rowH + gap)));
+  const per = cols * rows, pages = Math.ceil(items.length / per);
+  ui[key] = Math.min(ui[key], pages - 1);
+  items.forEach((t, i) => t.classList.toggle('off', Math.floor(i / per) !== ui[key]));
+  if (root.dataset.stretch) {
+    const used = pages > 1 ? rows : Math.ceil(items.length / cols);
+    root.style.gridAutoRows = Math.floor(Math.min(+root.dataset.stretch, (root.clientHeight - gap * (used - 1)) / used)) + 'px';
+  }
+  if (pages > 1) pager.innerHTML = Array.from({ length: pages }, (_, i) => `<button class="${i === ui[key] ? 'on' : ''}" data-page="${i}" aria-label="Page ${i + 1}"></button>`).join('');
+}
+const paginate = () => fitPages($('tiles'), $('pager'), 'page');
+$('pager').onclick = e => { const b = e.target.closest('[data-page]'); if (b) { ui.page = +b.dataset.page; paginate(); } };
+function turnPage(d) { const n = $('pager').children.length || 1, p = ui.page + d; if (p >= 0 && p < n) { ui.page = p; paginate(); } }
+let wheelLock = 0;
+$('tiles').addEventListener('wheel', e => { e.preventDefault(); if (Math.abs(e.deltaY) < 20 || Date.now() < wheelLock) return; wheelLock = Date.now() + 500; turnPage(e.deltaY > 0 ? 1 : -1); }, { passive: false });
+new ResizeObserver(() => paginate()).observe($('tiles'));
+
+// ---------- drink type ----------
+function renderDrinkTypes() {
+  $('types').innerHTML = DRINK_TYPES.map(d => `<button role="tab" class="${d === currentDrinkType ? 'on' : ''}" data-type="${d}">${d}</button>`).join('');
+}
+$('types').onclick = e => { const b = e.target.closest('[data-type]'); if (b) { currentDrinkType = b.dataset.type; renderDrinkTypes(); update(); } };
+
+// ---------- mix management ----------
+function addToMix(id) { const m = mix.find(x => x.id === id); if (m) m.qty += 1; else mix.push({ id, qty: 1 }); update(); }
+function removeFromMix(id) { mix = mix.filter(m => m.id !== id); update(); }
+function adjustQty(id, delta) { const m = mix.find(x => x.id === id); if (!m) return; m.qty = Math.max(0.25, Math.round((m.qty + delta) * 4) / 4); update(); }
+
+// ---------- the drink pane ----------
+function update() {
+  renderGlass();
+  renderVerdict();
+  renderDrinkViews();
+  renderIngredients();
+}
+
+function renderVerdict() {
+  const v = $('verdict');
+  if (!mix.length) { v.className = 'verdict idle'; v.innerHTML = `<span class="nm">Empty glass</span>`; return; }
+  const a = analyze(), g = Math.round(mix.reduce((s, m) => s + getIng(m.id).g * m.qty, 0));
+  v.className = 'verdict';
+  v.innerHTML = `<span class="lbl">Your ${currentDrinkType.toLowerCase()}</span><span class="nm">${Math.round(a.totals.macros.cal)} kcal · ${g} g</span>`;
+}
+
+function renderDrinkViews() {
+  const empty = txt => `<div class="d-empty">${txt}</div>`;
+  if (!mix.length) {
+    $('mixList').innerHTML = empty('Add ingredients from the picker');
+    ['nutriView', 'compView', 'healthView'].forEach(id => $(id).innerHTML = empty('Add ingredients to see the analysis'));
+    $('dtabs').querySelector('[data-dv="health"]').innerHTML = 'Health';
+    return fitDrinkView();
+  }
+  const a = analyze(), t = a.totals;
+  // Mix
+  $('mixList').innerHTML = mix.map(m => { const i = getIng(m.id);
+    return `<div class="mrow"><span class="em">${i.emoji}</span><span class="nm">${i.name}</span>
+      <span class="qty"><button data-q="${m.id}" data-d="-0.25" aria-label="Less ${i.name}">−</button><span class="v">${m.qty}× ${i.serving.split('(')[0].trim()}</span><button data-q="${m.id}" data-d="0.25" aria-label="More ${i.name}">+</button></span>
+      <button class="x" data-rm="${m.id}" aria-label="Remove ${i.name}">✕</button></div>`; }).join('');
+  // Nutrition: six macro tiles, then micronutrients by % of daily value
+  const mac = (v, u, n, hi) => `<div class="macro${hi ? ' hi' : ''}"><b>${v}<span class="mono" style="font-size:11px"> ${u}</span></b><span>${n}</span></div>`;
+  const micros = Object.keys(t.micros).filter(k => t.micros[k] > 0.01)
+    .sort((x, y) => t.micros[y] / (a.MICRO_RDA[y] || 1) - t.micros[x] / (a.MICRO_RDA[x] || 1));
+  $('nutriView').innerHTML = `<div class="macros">${mac(Math.round(t.macros.cal), 'kcal', 'energy')}${mac(t.macros.protein.toFixed(1), 'g', 'protein')}${mac(t.macros.carb.toFixed(1), 'g', 'carbs')}
+      ${mac(t.macros.fat.toFixed(1), 'g', 'fat')}${mac(t.macros.fiber.toFixed(1), 'g', 'fiber')}${mac(t.macros.sugar.toFixed(1), 'g', 'sugar', t.macros.sugar > 30)}</div>
+    ${micros.length ? `<div class="sub-lbl">Micronutrients · % daily value</div><div class="plist">${micros.map(k => { const val = t.micros[k], pct = Math.min(100, val / (a.MICRO_RDA[k] || 1) * 100);
+      return `<div class="bar-row"><span>${a.MICRO_NAMES[k] || k}</span><span class="v">${val < 1 ? val.toFixed(2) : val.toFixed(1)} ${a.MICRO_UNITS[k] || ''}</span><span class="bar"><i style="width:${pct}%;${pct > 80 ? 'background:var(--good)' : pct > 40 ? '' : 'background:var(--text-muted)'}"></i></span><span class="pct${pct > 80 ? ' good' : ''}">${Math.round(pct)}%</span></div>`; }).join('')}</div>` : ''}`;
+  // Compounds: strongest first, bar relative to the largest
+  const comps = Object.keys(t.compounds).filter(k => t.compounds[k] > 0.01).sort((x, y) => t.compounds[y] - t.compounds[x]).slice(0, 16);
+  const max = Math.max(1e-9, ...comps.map(k => t.compounds[k]));
+  const fmt = v => v >= 1000 ? (v / 1000).toFixed(1) + ' g' : v >= 1 ? v.toFixed(1) + ' mg' : (v * 1000).toFixed(0) + ' µg';
+  $('compView').innerHTML = comps.length ? `<div class="plist">${comps.map(k => `<div class="bar-row cmp"><span>${a.COMPOUND_NAMES[k] || k}</span><span class="v">${fmt(t.compounds[k])}</span><span class="bar"><i style="width:${t.compounds[k] / max * 100}%"></i></span></div>`).join('')}</div>`
+    : empty('No notable compounds');
+  // Health: cautions first, then synergies and condition notes; benefits as chips
+  const cards = [];
+  a.allWarnings.forEach(w => cards.push([w.type === 'danger' ? 'danger' : 'warn', w.cond, w.note, `from ${w.source}`]));
+  a.activeInteractions.filter(x => x.type !== 'good').forEach(x => cards.push(['warn', x.title, x.msg]));
+  a.diseaseAlerts.forEach(d => d.flags.forEach(f => cards.push(['warn', d.condition, f])));
+  a.activeInteractions.filter(x => x.type === 'good').forEach(x => cards.push(['good', x.title, x.msg]));
+  a.diseaseAlerts.forEach(d => d.positives.forEach(p => cards.push(['good', d.condition, p])));
+  const cautions = cards.filter(c => c[0] !== 'good').length;
+  $('healthView').innerHTML = `<div class="plist">${cards.map(([k, ti, msg, src]) => `<div class="alert ${k}">${ICON[k]}<div><b>${ti}</b>${msg}${src ? `<div class="src">${src}</div>` : ''}</div></div>`).join('')
+      || '<div class="alert good">' + ICON.good + '<div><b>No cautions</b>Nothing flagged for this mix</div></div>'}</div>
+    ${a.allBenefits.size ? `<div class="benefits">${[...a.allBenefits].map(b => `<span class="benefit">${b}</span>`).join('')}</div>` : ''}
+    <div class="d-foot">Estimates · not medical advice</div>`;
+  $('dtabs').querySelector('[data-dv="health"]').innerHTML = `Health${cautions ? `<span class="badge">${cautions}</span>` : ''}`;
+  fitDrinkView();
+}
+$('mixList').onclick = e => {
+  const q = e.target.closest('[data-q]'); if (q) return adjustQty(q.dataset.q, +q.dataset.d);
+  const r = e.target.closest('[data-rm]'); if (r) removeFromMix(r.dataset.rm);
+};
+
+/* page the current tab's list instead of letting it overflow (rule 36) */
+function fitDrinkView() {
+  const box = $('dviews'), dv = box.querySelector('.dv.on');
+  if (!dv || !box.offsetParent) return;
+  dv.querySelectorAll('.off').forEach(x => x.classList.remove('off'));
+  dv.querySelectorAll('.lpager').forEach(x => x.remove());
+  const over = () => dv.offsetHeight - box.clientHeight;
+  if (over() <= 1) return;
+  const benefits = dv.querySelector('.benefits');                 // health: drop the chips before paging cards
+  if (benefits) { benefits.classList.add('off'); if (over() <= 1) return; }
+  const list = dv.querySelector('.plist'); if (!list) return;
+  const items = [...list.children]; if (items.length < 2) return;
+  const pager = document.createElement('div'); pager.className = 'lpager'; pager.innerHTML = '<button></button>'; list.after(pager);
+  const top = items[0].getBoundingClientRect().top, span = items.at(-1).getBoundingClientRect().bottom - top;
+  const avail = Math.max(items[0].offsetHeight, span - over());
+  const pages = []; let start = 0;
+  items.forEach((it, i) => { if (it.getBoundingClientRect().bottom - items[start].getBoundingClientRect().top > avail && i > start) { pages.push([start, i]); start = i; } });
+  pages.push([start, items.length]);
+  const key = dv.dataset.dv; ui.lp[key] = Math.min(ui.lp[key] || 0, pages.length - 1);
+  const [a, b] = pages[ui.lp[key]];
+  items.forEach((it, i) => it.classList.toggle('off', i < a || i >= b));
+  pager.innerHTML = pages.map((_, i) => `<button class="${i === ui.lp[key] ? 'on' : ''}" data-lp="${i}" aria-label="Page ${i + 1}"></button>`).join('');
+  pager.onclick = e => { const x = e.target.closest('[data-lp]'); if (x) { ui.lp[key] = +x.dataset.lp; fitDrinkView(); } };
+}
+new ResizeObserver(() => fitDrinkView()).observe($('dviews'));
+
+function setDrinkView(v) {
+  ui.view = v;
+  $('dtabs').querySelectorAll('[data-dv]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.dv === v)));
+  $('dviews').querySelectorAll('.dv').forEach(el => el.classList.toggle('on', el.dataset.dv === v));
+  fitDrinkView();
+}
+$('dtabs').onclick = e => { const b = e.target.closest('[data-dv]'); if (b) setDrinkView(b.dataset.dv); };
+$('clearBtn').onclick = () => { mix = []; ui.lp = {}; update(); };
+
+// narrow screens: the glass takes ~34% of the card's width
+const narrowMQ = matchMedia('(max-width: 899px)');
+new ResizeObserver(() => {
+  const ds = $('drinkside');
+  if (!narrowMQ.matches) return ds.style.removeProperty('--glasscol');
+  ds.style.setProperty('--glasscol', Math.round(Math.max(96, Math.min(170, ds.clientWidth * .34))) + 'px');
+}).observe($('drinkside'));
+
+// search: on phones the field opens over the app bar
+$('searchOpen').onclick = () => { document.querySelector('.topbar').classList.add('searching'); $('q').focus(); };
+$('q').addEventListener('blur', () => { if (!$('q').value) document.querySelector('.topbar').classList.remove('searching'); });
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === '/' && document.activeElement !== $('q')) { e.preventDefault(); document.querySelector('.topbar').classList.add('searching'); $('q').focus(); return; }
+  if (e.key === 'Escape' && document.activeElement === $('q')) { $('q').value = ''; $('q').blur(); document.querySelector('.topbar').classList.remove('searching'); ui.page = 0; return renderIngredients(); }
+  if (/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
+  if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); turnPage(1); }
+  else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); turnPage(-1); }
+});
 
 // ====================== GLASS VISUALIZATION ======================
 function renderGlass() {
@@ -1139,17 +924,8 @@ function hexToRgb(hex) {
   return {r,g,b};
 }
 
-// ====================== ANALYSIS ======================
-function renderAnalysis() {
-  const el = document.getElementById('analysisPanel');
-  if(mix.length === 0) {
-    el.innerHTML = `<div class="analysis-empty">
-      <div style="margin-bottom:12px"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></div>
-      Nutritional analysis will appear<br>here as you add ingredients
-    </div>`;
-    return;
-  }
-
+// ====================== ANALYSIS (totals, interactions, condition checks) ======================
+function analyze() {
   // Compute totals
   const totals = { macros:{cal:0,protein:0,fat:0,carb:0,fiber:0,sugar:0}, micros:{}, compounds:{} };
   const allBenefits = new Set();
@@ -1242,114 +1018,7 @@ function renderAnalysis() {
     folate:400, calcium:1000, iron:18, potassium:2600, magnesium:420, manganese:2.3,
     zinc:11, copper:0.9, phosphorus:700, sodium:2300, thiamin:1.2,
   };
-
-  let html = '';
-
-  // MACROS
-  html += `<div class="analysis-section">
-    <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Macronutrients</div>
-    <div class="macro-grid">
-      <div class="macro-card"><div class="macro-val">${Math.round(totals.macros.cal)}<span class="macro-unit"> kcal</span></div><div class="macro-name">Calories</div></div>
-      <div class="macro-card"><div class="macro-val">${totals.macros.protein.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Protein</div></div>
-      <div class="macro-card"><div class="macro-val">${totals.macros.fat.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Fat</div></div>
-      <div class="macro-card"><div class="macro-val">${totals.macros.carb.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Carbs</div></div>
-      <div class="macro-card"><div class="macro-val">${totals.macros.fiber.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Fiber</div></div>
-      <div class="macro-card"><div class="macro-val">${totals.macros.sugar.toFixed(1)}<span class="macro-unit"> g</span></div><div class="macro-name">Sugar</div></div>
-    </div>
-  </div>`;
-
-  // MICRONUTRIENTS
-  const activeMicros = Object.keys(totals.micros).filter(k => totals.micros[k] > 0.01).sort((a,b) => {
-    const pctA = (totals.micros[a] / (MICRO_RDA[a]||1)) * 100;
-    const pctB = (totals.micros[b] / (MICRO_RDA[b]||1)) * 100;
-    return pctB - pctA;
-  });
-  if(activeMicros.length) {
-    html += `<div class="analysis-section">
-      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>Micronutrients</div>
-      <div class="compound-list">${activeMicros.map(k => {
-        const val = totals.micros[k];
-        const pct = Math.min(100, (val / (MICRO_RDA[k]||1)) * 100);
-        return `<div class="compound-row">
-          <span class="compound-name">${MICRO_NAMES[k]||k}</span>
-          <span class="compound-val">${val < 1 ? val.toFixed(2) : val.toFixed(1)} ${MICRO_UNITS[k]||''}</span>
-          <div class="compound-bar-wrap"><div class="compound-bar" style="width:${pct}%;background:${pct>80?'var(--good)':pct>40?'var(--accent)':'var(--text-muted)'}"></div></div>
-          <span class="compound-val" style="width:36px;text-align:right;color:${pct>80?'var(--good)':'var(--text-muted)'}">${Math.round(pct)}%</span>
-        </div>`;
-      }).join('')}</div>
-    </div>`;
-  }
-
-  // KEY COMPOUNDS
-  const activeCompounds = Object.keys(totals.compounds)
-    .filter(k => totals.compounds[k] > 0.01)
-    .sort((a,b) => totals.compounds[b] - totals.compounds[a])
-    .slice(0, 12);
-  if(activeCompounds.length) {
-    const maxVal = Math.max(...activeCompounds.map(k => totals.compounds[k]));
-    html += `<div class="analysis-section">
-      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="m10 16 1.5 1.5"/><path d="m14 8-1.5-1.5"/><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/><path d="m16.5 10.5 1 1"/><path d="m17 6-2.891-2.891"/><path d="M2 15c6.667-6 13.333 0 20-6"/><path d="m20 9 .891.891"/><path d="M3.109 14.109 4 15"/><path d="m6.5 12.5 1 1"/><path d="m7 18 2.891 2.891"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/></svg>Key Compounds</div>
-      <div class="compound-list">${activeCompounds.map(k => {
-        const val = totals.compounds[k];
-        const pct = (val / maxVal) * 100;
-        return `<div class="compound-row">
-          <span class="compound-name">${COMPOUND_NAMES[k]||k}</span>
-          <span class="compound-val">${val >= 1000 ? (val/1000).toFixed(1)+'g' : val >= 1 ? val.toFixed(1)+'mg' : (val*1000).toFixed(0)+'µg'}</span>
-          <div class="compound-bar-wrap"><div class="compound-bar" style="width:${pct}%"></div></div>
-        </div>`;
-      }).join('')}</div>
-    </div>`;
-  }
-
-  // INTERACTIONS
-  if(activeInteractions.length) {
-    html += `<div class="analysis-section">
-      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>Compound Interactions</div>
-      ${activeInteractions.map(inter => `
-        <div class="alert-card ${inter.type}">
-          <div class="alert-icon">${inter.type==='good'?'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>':'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>'}</div>
-          <div class="alert-text"><strong>${inter.title}</strong>${inter.msg}</div>
-        </div>
-      `).join('')}
-    </div>`;
-  }
-
-  // WARNINGS
-  if(allWarnings.length) {
-    html += `<div class="analysis-section">
-      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z"/><path d="M21 12h1"/><path d="M18.5 4.5 18 5"/><path d="M2 12h1"/><path d="M12 2v1"/><path d="m4.929 4.929.707.707"/><path d="M12 12v6"/></svg>Condition Alerts</div>
-      ${allWarnings.map(w => `
-        <div class="alert-card ${w.type}">
-          <div class="alert-icon">${w.type==='danger'?'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16h.01"/><path d="M12 8v4"/><path d="M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z"/></svg>':'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>'}</div>
-          <div class="alert-text"><strong>${w.cond}</strong>${w.note}<br><span style="opacity:0.6;font-size:11px">from ${w.source}</span></div>
-        </div>
-      `).join('')}
-    </div>`;
-  }
-
-  // DISEASE IMPACT
-  if(diseaseAlerts.length) {
-    html += `<div class="analysis-section">
-      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>Health Condition Impact</div>
-      ${diseaseAlerts.map(da => `
-        <div style="margin-bottom:10px">
-          <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text)">${da.condition}</div>
-          ${da.flags.map(f => `<div class="alert-card warn" style="margin-bottom:4px"><div class="alert-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div><div class="alert-text">${f}</div></div>`).join('')}
-          ${da.positives.map(p => `<div class="alert-card good" style="margin-bottom:4px"><div class="alert-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg></div><div class="alert-text">${p}</div></div>`).join('')}
-        </div>
-      `).join('')}
-    </div>`;
-  }
-
-  // BENEFITS
-  if(allBenefits.size) {
-    html += `<div class="analysis-section">
-      <div class="section-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>Combined Benefits</div>
-      <div class="benefit-tags">${[...allBenefits].map(b => `<span class="benefit-tag">${b}</span>`).join('')}</div>
-    </div>`;
-  }
-
-  el.innerHTML = html;
+  return { totals, allBenefits, allWarnings, activeInteractions, diseaseAlerts, COMPOUND_NAMES, MICRO_NAMES, MICRO_UNITS, MICRO_RDA };
 }
 
 // App-bar CTA: load a sample drink (cycles through a few classic combos)
@@ -1366,8 +1035,9 @@ function mixSample() {
   const s = SAMPLE_MIXES[sampleIdx];
   mix = s.items.filter(([id]) => getIng(id)).map(([id, qty]) => ({ id, qty }));
   currentDrinkType = s.type;
-  renderDrinkTypes(); renderMix(); renderGlass(); renderAnalysis();
+  renderDrinkTypes(); update();
 }
+$('sampleBtn').onclick = mixSample;
 
 // Theme switch shared with the sankhacooray.com family (sc-theme)
 (function(){var r=document.documentElement,K="sc-theme",mq=window.matchMedia("(prefers-color-scheme: dark)");function eff(){var a=r.getAttribute("data-theme");if(a==="light"||a==="dark")return a;return mq.matches?"dark":"light"}
@@ -1377,7 +1047,7 @@ function mixSample() {
   b.addEventListener("click",function(){var n=eff()==="dark"?"light":"dark";try{localStorage.setItem(K,n)}catch(e){}r.setAttribute("data-theme",n);label()})})();
 
 // Boot
-init();
+renderCategories(); renderDrinkTypes(); update();
 
 if ("serviceWorker" in navigator && location.protocol === "https:") {
   window.addEventListener("load", () => {

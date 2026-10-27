@@ -1,4 +1,4 @@
-const CACHE = "mixlab-v2";
+const CACHE = "mixlab-v3";
 const ASSETS = [
   "./",
   "./index.html",
