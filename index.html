@@ -29,7 +29,10 @@
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0a0a0c">
+<meta name="theme-color" content="#f5f6f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a0a0c" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<script>(function(){try{var t=localStorage.getItem("sc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MixLab">
@@ -37,30 +40,63 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0c;
-  --surface: #131318;
-  --surface2: #1a1a22;
-  --surface3: #22222e;
-  --border: #2a2a38;
-  --text: #e8e6f0;
-  --text-dim: #8886a0;
-  --text-muted: #5a587a;
-  --accent: #a6e36f;
-  --accent-dim: #7ab84a;
-  --danger: #ff6b6b;
-  --danger-bg: rgba(255,107,107,0.08);
-  --danger-border: rgba(255,107,107,0.2);
-  --warn: #ffb347;
-  --warn-bg: rgba(255,179,71,0.08);
-  --warn-border: rgba(255,179,71,0.2);
-  --good: #6bdfb8;
-  --good-bg: rgba(107,223,184,0.08);
-  --good-border: rgba(107,223,184,0.2);
-  --info: #7eb8ff;
+  /* Light (lab bench) is the default; dark follows the system or the switch. */
+  --bg: #f5f6f0;
+  --surface: #ffffff;
+  --surface2: #f0f2ea;
+  --surface3: #e6e9de;
+  --border: #dfe3d4;
+  --text: #1b1d16;
+  --text-dim: #555a4a;
+  --text-muted: #80856f;
+  --accent: #4e8a1c;
+  --accent-dim: #3f7215;
+  --accent-hi: #5c9c26;
+  --accent-soft: rgba(78,138,28,0.12);
+  --on-accent: #ffffff;
+  --danger: #c43c3c;
+  --danger-bg: rgba(196,60,60,0.07);
+  --danger-border: rgba(196,60,60,0.22);
+  --warn: #b36b00;
+  --warn-bg: rgba(179,107,0,0.07);
+  --warn-border: rgba(179,107,0,0.22);
+  --good: #1f8a66;
+  --good-bg: rgba(31,138,102,0.07);
+  --good-border: rgba(31,138,102,0.22);
+  --info: #2f6fc0;
+  --card-hover: #eef2e4;
+  --float: rgba(255,255,255,0.86);
+  --float-shadow: 0 10px 30px -14px rgba(40,50,20,.28);
+  --glass-stroke: rgba(30,40,20,0.28);
+  --glass-fill: rgba(30,40,20,0.04);
+  --glass-label: rgba(30,40,20,0.55);
+  --page-bg: #f5f6f0;
   --radius: 12px;
   --radius-sm: 8px;
+  color-scheme: light;
 }
-
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0a0a0c; --surface: #131318; --surface2: #1a1a22; --surface3: #22222e; --border: #2a2a38;
+  --text: #e8e6f0; --text-dim: #8886a0; --text-muted: #5a587a;
+  --accent: #a6e36f; --accent-dim: #7ab84a; --accent-hi: #b9ef88; --accent-soft: rgba(166,227,111,0.14); --on-accent: #0a0a0c;
+  --danger: #ff6b6b; --danger-bg: rgba(255,107,107,0.08); --danger-border: rgba(255,107,107,0.2);
+  --warn: #ffb347; --warn-bg: rgba(255,179,71,0.08); --warn-border: rgba(255,179,71,0.2);
+  --good: #6bdfb8; --good-bg: rgba(107,223,184,0.08); --good-border: rgba(107,223,184,0.2);
+  --info: #7eb8ff; --card-hover: #1c1c26; --float: rgba(19,19,24,0.82); --float-shadow: 0 10px 30px -12px rgba(0,0,0,.6);
+  --glass-stroke: rgba(255,255,255,0.18); --glass-fill: rgba(255,255,255,0.06); --glass-label: rgba(255,255,255,0.5);
+  --page-bg: #0a0a0c; color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --bg: #0a0a0c; --surface: #131318; --surface2: #1a1a22; --surface3: #22222e; --border: #2a2a38;
+  --text: #e8e6f0; --text-dim: #8886a0; --text-muted: #5a587a;
+  --accent: #a6e36f; --accent-dim: #7ab84a; --accent-hi: #b9ef88; --accent-soft: rgba(166,227,111,0.14); --on-accent: #0a0a0c;
+  --danger: #ff6b6b; --danger-bg: rgba(255,107,107,0.08); --danger-border: rgba(255,107,107,0.2);
+  --warn: #ffb347; --warn-bg: rgba(255,179,71,0.08); --warn-border: rgba(255,179,71,0.2);
+  --good: #6bdfb8; --good-bg: rgba(107,223,184,0.08); --good-border: rgba(107,223,184,0.2);
+  --info: #7eb8ff; --card-hover: #1c1c26; --float: rgba(19,19,24,0.82); --float-shadow: 0 10px 30px -12px rgba(0,0,0,.6);
+  --glass-stroke: rgba(255,255,255,0.18); --glass-fill: rgba(255,255,255,0.06); --glass-label: rgba(255,255,255,0.5);
+  --page-bg: #0a0a0c; color-scheme: dark;
+}
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
@@ -173,7 +209,7 @@ body {
 }
 .cat-btn.active, .cat-btn:hover {
   background: var(--accent);
-  color: var(--bg);
+  color: var(--on-accent);
   border-color: var(--accent);
 }
 
@@ -217,7 +253,7 @@ body {
 }
 .ing-add:hover {
   background: var(--accent);
-  color: var(--bg);
+  color: var(--on-accent);
   border-color: var(--accent);
 }
 
@@ -472,14 +508,87 @@ body {
   .header { padding: 16px 20px; }
   .tagline { display: none; }
 }
+
+/* ===== ui-ux-style layer ===== */
+/* rule 14: body is the scroller, no overscroll bounce, no white edge */
+html { height: 100%; overflow: hidden; background: var(--page-bg); overscroll-behavior: none; }
+body { height: 100%; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: none; display: flex; flex-direction: column; }
+::-webkit-scrollbar-thumb { background: var(--surface3); }
+
+/* rules 7, 10, 12, 19, 23: full-width app bar, no bottom border, theme switch + one CTA at the right edge */
+.header {
+  position: sticky; top: 0; z-index: 20; flex: none;
+  height: 60px; padding: 0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
+  border-bottom: 0; background: var(--bg); gap: 14px;
+}
+.logo { font-size: 28px; line-height: 1; white-space: nowrap; }
+.tagline { margin-left: 0; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iconbtn { all: unset; cursor: pointer; flex: none; width: 36px; height: 36px; border-radius: 999px; display: grid; place-items: center; color: var(--text-dim); transition: background-color .15s, color .15s; }
+.iconbtn:hover { color: var(--text); background: var(--accent-soft); }
+.iconbtn:focus-visible, .cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ico-sun { display: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ico-sun { display: block; } :root:not([data-theme="light"]) .ico-moon { display: none; } }
+:root[data-theme="dark"] .ico-sun { display: block; } :root[data-theme="dark"] .ico-moon { display: none; }
+.cta {
+  flex: none; cursor: pointer; border: 0; font-family: inherit; font-size: 14px; font-weight: 600; line-height: 1;
+  background: var(--accent); color: var(--on-accent); padding: 11px 18px; border-radius: 999px; white-space: nowrap;
+  transition: background-color .15s, box-shadow .15s;
+}
+.cta:hover { background: var(--accent-hi); box-shadow: 0 0 0 4px var(--accent-soft), 0 6px 20px -6px var(--accent); }
+.cta .short { display: none; }
+
+/* rule 32: side panes float like the app bar; rule 7: no divider lines inside them */
+.app { flex: 1 1 0; min-height: 0; height: auto; gap: 12px; padding: 0 12px; }
+.panel-left, .panel-right {
+  border: 1px solid var(--border); border-radius: 14px; background: var(--float);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: var(--float-shadow);
+}
+.panel-header { border-bottom: 0; padding-bottom: 8px; }
+.categories { border-bottom: 0; padding-top: 4px; padding-bottom: 8px; scrollbar-width: none; }
+.panel-center { padding: 20px 12px; overscroll-behavior: contain; }
+.ingredient-list, .analysis-scroll { overscroll-behavior: contain; }
+.drink-type-selector { flex-wrap: wrap; justify-content: center; }
+
+/* rule 20: rows hover with a slight colour change, not an outline */
+.ingredient-item:hover { background: var(--card-hover); border-color: transparent; }
+
+/* glass drawing follows the theme */
+.glass-container .glass-outline { stroke: var(--glass-stroke); }
+.glass-container .glass-label, .glass-container .glass-empty { fill: var(--glass-label); }
+.glass-container .glass-straw { fill: var(--glass-fill); stroke: var(--glass-stroke); }
+
+/* rule 18: footer is one short line */
+.footer { flex: none; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 14px; padding: 10px 12px 12px; font-size: 12.5px; color: var(--text-muted); }
+.footer a { color: var(--text-dim); text-decoration: none; }
+.footer a:hover { color: var(--accent); }
+
+/* rule 33: laptops fit the screen; each panel scrolls inside itself */
+@media (min-width: 861px) {
+  body { overflow-y: hidden; }
+}
+@media (max-width: 860px) {
+  .app { flex: none; }
+  .tagline { display: none; }
+  .header { height: 56px; }
+  .logo { font-size: 24px; }
+  .spacer-m { flex: 1; }
+}
+@media (max-width: 420px) {
+  .cta .long { display: none; } .cta .short { display: inline; }
+  .header { gap: 8px; }
+  .logo span { display: none; }
+}
 </style>
 </head>
 <body>
 
-<div class="header">
+<header class="header">
   <div class="logo">MixLab <span>v0.1</span></div>
   <div class="tagline">Drink Innovation System — Nutrition · Compounds · Safety</div>
-</div>
+  <div class="spacer-m"></div>
+  <button class="iconbtn" id="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme"><svg class="ico-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ico-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
+  <button class="cta" id="sampleBtn" type="button" onclick="mixSample()"><span class="long">Mix a sample drink</span><span class="short">Sample drink</span></button>
+</header>
 
 <div class="app">
   <!-- LEFT: Ingredient Picker -->
@@ -509,6 +618,12 @@ body {
     <div class="analysis-scroll" id="analysisPanel"></div>
   </div>
 </div>
+
+<footer class="footer">
+  <span>MixLab · a drink innovation lab · not medical advice</span>
+  <a href="https://sankhacooray.com">sankhacooray.com</a>
+  <a href="https://github.com/sankhacooray/mixlab-sankhacooray-com">Source</a>
+</footer>
 
 <script>
 // ====================== INGREDIENT DATABASE ======================
@@ -911,9 +1026,9 @@ function renderGlass() {
           <stop offset="100%" stop-color="rgba(255,255,255,0.06)"/>
         </linearGradient>
       </defs>
-      <path d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"
+      <path class="glass-outline" d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"
         fill="url(#glassShine)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-      <text x="100" y="180" text-anchor="middle" fill="rgba(255,255,255,0.1)" font-size="40">🥤</text>
+      <text x="100" y="180" text-anchor="middle" fill="rgba(255,255,255,0.1)" font-size="40" opacity="0.35">🥤</text>
     </svg>`;
     return;
   }
@@ -1002,15 +1117,15 @@ function renderGlass() {
     </g>
 
     <!-- Glass outline -->
-    <path d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"
+    <path class="glass-outline" d="M45,40 L35,280 Q35,300 55,300 L145,300 Q165,300 165,280 L155,40 Z"
       fill="url(#glassShine2)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
 
     <!-- Straw -->
-    <rect x="118" y="10" width="6" height="${Math.max(fillTop,60)+20}" rx="3"
+    <rect class="glass-straw" x="118" y="10" width="6" height="${Math.max(fillTop,60)+20}" rx="3"
       fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
 
     <!-- Volume label -->
-    <text x="100" y="${Math.max(30, fillTop-12)}" text-anchor="middle"
+    <text class="glass-label" x="100" y="${Math.max(30, fillTop-12)}" text-anchor="middle"
       font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(255,255,255,0.5)">
       ${Math.round(totalG)}${totalG > 200 ? 'ml' : 'g'}
     </text>
@@ -1236,6 +1351,30 @@ function renderAnalysis() {
 
   el.innerHTML = html;
 }
+
+// App-bar CTA: load a sample drink (cycles through a few classic combos)
+const SAMPLE_MIXES = [
+  { type:'Smoothie', items:[['banana',1],['oat_milk',1],['turmeric',1],['black_pepper',1],['ginger',1],['honey',1]] },
+  { type:'Shake',    items:[['blueberry',1],['strawberry',1],['whey_protein',1],['almond_milk',1],['chia',1]] },
+  { type:'Coffee',   items:[['espresso',1],['oat_milk',1],['cinnamon',1],['maple_syrup',0.5]] },
+  { type:'Juice',    items:[['mango',1],['pineapple',1],['coconut_water',1],['ginger',1]] },
+  { type:'Yogurt Bowl', items:[['greek_yogurt',1],['blueberry',1],['flaxseed',1],['honey',0.5]] },
+];
+let sampleIdx = -1;
+function mixSample() {
+  sampleIdx = (sampleIdx + 1) % SAMPLE_MIXES.length;
+  const s = SAMPLE_MIXES[sampleIdx];
+  mix = s.items.filter(([id]) => getIng(id)).map(([id, qty]) => ({ id, qty }));
+  currentDrinkType = s.type;
+  renderDrinkTypes(); renderMix(); renderGlass(); renderAnalysis();
+}
+
+// Theme switch shared with the sankhacooray.com family (sc-theme)
+(function(){var r=document.documentElement,K="sc-theme",mq=window.matchMedia("(prefers-color-scheme: dark)");function eff(){var a=r.getAttribute("data-theme");if(a==="light"||a==="dark")return a;return mq.matches?"dark":"light"}
+  var b=document.getElementById("theme-toggle");if(!b)return;
+  function label(){var l="Switch to "+(eff()==="dark"?"light":"dark")+" theme";b.setAttribute("aria-label",l);b.title=l}
+  label();if(mq.addEventListener)mq.addEventListener("change",label);
+  b.addEventListener("click",function(){var n=eff()==="dark"?"light":"dark";try{localStorage.setItem(K,n)}catch(e){}r.setAttribute("data-theme",n);label()})})();
 
 // Boot
 init();
