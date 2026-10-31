@@ -26,3 +26,9 @@ Sources are listed in the Taste tab's ⓘ.
 ## Deploy
 Bump `CACHE` in `sw.js` (`mixlab-vN`), push `main`, curl the live page with `?nc=$RANDOM` until the new markup shows.
 Fit-check in headless Chrome at 1352×690, 1280×640, 1920×1080, 820×1180, 600×1000, 390×844, 375×667, 360×740.
+
+## Lighthouse
+<!-- lighthouse-optimized: 2026-10-31 -->
+Baseline (mobile): performance 74, accessibility 91, best-practices 100, SEO 100.
+Fixed: Google Fonts non-blocking with preconnects (dropped unused DM Sans 300/500, serif italic, Mono 500); `--text-muted`/`--text-dim` raised to ≥4.5:1 in both themes; tile and list pager dots now have 24px tap targets (same 9px/8px dots).
+Left: inline JS isn't minified (single-file app, no build step); gtag/shared-script findings are handled centrally. GitHub Pages can't set cache headers.

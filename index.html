@@ -37,7 +37,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MixLab">
 
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap"></noscript>
 <style>
 :root {
   /* Light (lab bench) is the default; dark follows the system or the switch. */
@@ -48,7 +51,7 @@
   --border: #dfe3d4;
   --text: #1b1d16;
   --text-dim: #555a4a;
-  --text-muted: #80856f;
+  --text-muted: #646955;
   --accent: #4e8a1c;
   --accent-dim: #3f7215;
   --accent-hi: #5c9c26;
@@ -78,7 +81,7 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0a0a0c; --surface: #131318; --surface2: #1a1a22; --surface3: #22222e; --border: #2a2a38;
-  --text: #e8e6f0; --text-dim: #8886a0; --text-muted: #5a587a;
+  --text: #e8e6f0; --text-dim: #9997b4; --text-muted: #85839f;
   --accent: #a6e36f; --accent-dim: #7ab84a; --accent-hi: #b9ef88; --accent-soft: rgba(166,227,111,0.14); --on-accent: #0a0a0c;
   --danger: #ff6b6b; --danger-bg: rgba(255,107,107,0.08); --danger-border: rgba(255,107,107,0.2);
   --warn: #ffb347; --warn-bg: rgba(255,179,71,0.08); --warn-border: rgba(255,179,71,0.2);
@@ -89,7 +92,7 @@
 } }
 :root[data-theme="dark"] {
   --bg: #0a0a0c; --surface: #131318; --surface2: #1a1a22; --surface3: #22222e; --border: #2a2a38;
-  --text: #e8e6f0; --text-dim: #8886a0; --text-muted: #5a587a;
+  --text: #e8e6f0; --text-dim: #9997b4; --text-muted: #85839f;
   --accent: #a6e36f; --accent-dim: #7ab84a; --accent-hi: #b9ef88; --accent-soft: rgba(166,227,111,0.14); --on-accent: #0a0a0c;
   --danger: #ff6b6b; --danger-bg: rgba(255,107,107,0.08); --danger-border: rgba(255,107,107,0.2);
   --warn: #ffb347; --warn-bg: rgba(255,179,71,0.08); --warn-border: rgba(255,179,71,0.2);
@@ -158,9 +161,10 @@ button { font: inherit; color: inherit; }
 .d-tabs button[aria-selected="true"] { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
 .d-tabs button .badge { display: inline-grid; place-items: center; min-width: 17px; height: 17px; padding: 0 4px; margin-left: 5px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: var(--warn-bg); color: var(--warn); }
 .d-empty { color: var(--text-muted); font-size: 13.5px; text-align: center; padding-top: 10px; }
-.lpager { display: flex; justify-content: center; gap: 7px; min-height: 9px; margin-top: 2px; }
-.lpager button { all: unset; cursor: pointer; width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
-.lpager button.on { background: var(--accent); }
+.lpager { display: flex; justify-content: center; gap: 0; min-height: 9px; margin-top: 2px; }
+.lpager button { all: unset; cursor: pointer; width: 24px; height: 24px; margin: -8px 0; display: grid; place-items: center; border-radius: 50%; }
+.lpager button::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+.lpager button.on::before { background: var(--accent); }
 
 /* mix rows */
 .mrow { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto 26px; align-items: center; gap: 8px; min-height: 34px; padding: 2px 8px; border-radius: 10px; background: var(--surface2); }
@@ -237,9 +241,11 @@ button { font: inherit; color: inherit; }
 .tile .add { all: unset; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; color: var(--accent); background: var(--surface); }
 .tile .add:hover { background: var(--accent); color: var(--on-accent); }
 .tile .n { font-size: 11px; font-weight: 700; color: var(--accent); }
-.pager { display: flex; justify-content: center; gap: 8px; min-height: 10px; }
-.pager button { all: unset; cursor: pointer; width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
-.pager button.on { background: var(--accent); }
+.pager { display: flex; justify-content: center; gap: 0; min-height: 10px; }
+/* 24px tap target around a 9px dot; negative margin keeps the old 10px row height */
+.pager button { all: unset; cursor: pointer; width: 24px; height: 24px; margin: -7px 0; display: grid; place-items: center; border-radius: 50%; }
+.pager button::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+.pager button.on::before { background: var(--accent); }
 .p-empty { grid-column: 1 / -1; color: var(--text-muted); font-size: 13.5px; padding: 8px 2px; }
 
 /* reserve the shared footer's final height so nothing jumps when its script arrives */
